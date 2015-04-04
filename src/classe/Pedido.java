@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class Pedido
 {
-	private int code, table;
+	private int code, table, status;
 	private Date dateTime;
 	private Garcom garcom;
 	private ArrayList<Produtos> produtosArrayList;
@@ -53,5 +53,15 @@ public class Pedido
 	public void setProdutosArrayList( Produtos produtos ) 
 	{
 		this.produtosArrayList.add( produtos );
+	}
+
+	public int getStatus() 
+	{
+		return status;
+	}
+
+	public void setStatus( int status ) 
+	{
+		this.status = status;
 	}
 }

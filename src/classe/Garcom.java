@@ -5,6 +5,13 @@ public class Garcom
 	private String name, cpf;
 	private double salary;
 	
+	public Garcom( String name, String cpf, double salary )
+	{
+		this.setName( name );
+		this.setCpf( cpf );
+		this.setSalary( salary );
+	}
+	
 	public String getName() 
 	{
 		return name;

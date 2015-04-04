@@ -4,6 +4,12 @@ public class Mesas
 {
 	private int number, total;
 
+	public Mesas( int number, int total )
+	{
+		this.setNumber( number );
+		this.setTotal( total );
+	}
+	
 	public int getNumber()
 	{
 		return number;

@@ -11,6 +11,8 @@ public class MesasRepo
 	public MesasRepo()
 	{
 		mesasArrayList = new ArrayList<Mesas>();
+		
+		generateMesas();
 	}
 	
 	/**
@@ -34,4 +36,12 @@ public class MesasRepo
 		return tablesThatCanUse;
 	}
 	
+	private void generateMesas()
+	{
+		mesasArrayList.add( new Mesas( 1, 5 ) );
+		mesasArrayList.add( new Mesas( 2, 2 ) );
+		mesasArrayList.add( new Mesas( 3, 4 ) );
+		mesasArrayList.add( new Mesas( 4, 6 ) );
+		mesasArrayList.add( new Mesas( 5, 2 ) );
+	}	
 }
