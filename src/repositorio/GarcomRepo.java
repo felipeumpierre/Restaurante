@@ -18,6 +18,11 @@ public class GarcomRepo
 		garcomArrayList.add( garcom );
 	}
 	
+	public Garcom getGarcom( int index )
+	{
+		return garcomArrayList.get( index );
+	}
+	
 	public void removeGarcom( int index )
 	{
 		garcomArrayList.remove( index );

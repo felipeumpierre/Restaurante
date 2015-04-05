@@ -12,6 +12,11 @@ public class Garcom
 		this.setSalary( salary );
 	}
 	
+	public Garcom()
+	{
+		
+	}
+	
 	public String getName() 
 	{
 		return name;
@@ -40,5 +45,12 @@ public class Garcom
 	public void setSalary( double salary ) 
 	{
 		this.salary = salary;
+	}
+	
+	public String toString()
+	{
+		return "\tNome: " + this.getName() + "\n" +
+				"\tCPF: " + this.getCpf() + "\n" +
+				"\tSalário: " + this.getSalary() + "\n";
 	}
 }

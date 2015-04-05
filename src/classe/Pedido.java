@@ -7,9 +7,13 @@ public class Pedido
 {
 	private int code, table, status;
 	private Date dateTime;
-	private Mesas mesa;
 	private Garcom garcom;
 	private ArrayList<Produtos> produtosArrayList;
+	
+	public Pedido()
+	{
+		produtosArrayList = new ArrayList<Produtos>();
+	}
 	
 	public int getCode() 
 	{
@@ -55,6 +59,11 @@ public class Pedido
 	{
 		this.produtosArrayList.add( produtos );
 	}
+	
+	public Produtos getProduto( int index )
+	{
+		return this.produtosArrayList.get( index );
+	}
 
 	public int getStatus() 
 	{
@@ -65,14 +74,16 @@ public class Pedido
 	{
 		this.status = status;
 	}
-
-	public Mesas getMesa() 
+	
+	public String toString()
 	{
-		return mesa;
-	}
-
-	public void setMesa( Mesas mesa ) 
-	{
-		this.mesa = mesa;
+		String return_string = "";
+		
+		for( Produtos prod: this.getProdutosArrayList() )
+		{
+			return_string += prod.toString();
+		}
+		
+		return return_string;
 	}
 }

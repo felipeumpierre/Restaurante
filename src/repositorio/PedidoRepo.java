@@ -25,6 +25,11 @@ public class PedidoRepo
 		return pedido.getProdutosArrayList();
 	}
 	
+	public Produtos getProduto( int index )
+	{
+		return pedido.getProduto( index );
+	}
+	
 	public void changeStatusPedido( int status ) throws InvalidStatusCode
 	{
 		switch( status )

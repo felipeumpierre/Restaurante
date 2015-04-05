@@ -1,6 +1,8 @@
 package repositorio;
 
 import java.util.ArrayList;
+
+import classe.Garcom;
 import classe.Mesas;
 
 
@@ -15,11 +17,12 @@ public class MesasRepo
 		generateMesas();
 	}
 	
-	public void reserveTable( Mesas mesa )
+	public void reserveTable( Mesas mesa, Garcom garcom )
 	{
 		if( mesa.isOccuped() )
 		{
 			mesa.setOccuped( true );
+			mesa.setGarcom( garcom );
 		}
 	}
 	

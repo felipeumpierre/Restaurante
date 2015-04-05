@@ -7,6 +7,13 @@ public class Produtos
 	private double price;
 	private String[] type = { "comida", "bebida", "sobremesa", "outro" };
 	
+	public Produtos( int code, String name, double price )
+	{
+		this.setCode( code );
+		this.setName( name );
+		this.setPrice( price );
+	}
+	
 	public int getCode() 
 	{
 		return code;
@@ -45,5 +52,12 @@ public class Produtos
 	public void setType( String[] type ) 
 	{
 		this.type = type;
+	}
+	
+	public String toString()
+	{
+		return "\tProduto #" + this.getCode() + "\n" +
+				"\t\tNome: " + this.getName() + "\n" +
+				"\t\tPreço: " + this.getPrice() + "\n";
 	}
 }
