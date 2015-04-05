@@ -15,25 +15,25 @@ public class MesasRepo
 		generateMesas();
 	}
 	
-	/**
-	 * 
-	 * 
-	 * @param capacity
-	 * @return ArrayList<Mesas>
-	 */
-	public ArrayList<Mesas> checkTablesWithCapacity( int capacity )
+	public void reserveTable( Mesas mesa )
 	{
-		ArrayList<Mesas> tablesThatCanUse = new ArrayList<Mesas>();
-		
+		if( mesa.isOccuped() )
+		{
+			mesa.setOccuped( true );
+		}
+	}
+	
+	public Mesas checkTablesWithCapacity( int capacity )
+	{
 		for( Mesas mesa: mesasArrayList )
 		{
-			if( mesa.getTotal() >= capacity )
+			if( ( mesa.getTotal() >= capacity ) && ( !mesa.isOccuped() ) )
 			{
-				tablesThatCanUse.add( mesa );
+				return mesa;
 			}
 		}
 		
-		return tablesThatCanUse;
+		return null;
 	}
 	
 	private void generateMesas()
@@ -43,5 +43,5 @@ public class MesasRepo
 		mesasArrayList.add( new Mesas( 3, 4 ) );
 		mesasArrayList.add( new Mesas( 4, 6 ) );
 		mesasArrayList.add( new Mesas( 5, 2 ) );
-	}	
+	}
 }

@@ -7,6 +7,7 @@ public class Pedido
 {
 	private int code, table, status;
 	private Date dateTime;
+	private Mesas mesa;
 	private Garcom garcom;
 	private ArrayList<Produtos> produtosArrayList;
 	
@@ -63,5 +64,15 @@ public class Pedido
 	public void setStatus( int status ) 
 	{
 		this.status = status;
+	}
+
+	public Mesas getMesa() 
+	{
+		return mesa;
+	}
+
+	public void setMesa( Mesas mesa ) 
+	{
+		this.mesa = mesa;
 	}
 }

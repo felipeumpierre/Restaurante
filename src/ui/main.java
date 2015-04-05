@@ -16,6 +16,8 @@ public class main
 		garcomRepo.addGarcom( new Garcom( "Eduardo", "12345", 1400.00 ) );
 		
 		// cliente #1
-		mesasRepo.checkTablesWithCapacity( 3 );
+		Mesas available = mesasRepo.checkTablesWithCapacity( 3 );
+		
+		mesasRepo.reserveTable( available );
 	}
 }
