@@ -21,6 +21,12 @@ public class main
 		
 		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 0 ) );
 		
+		mesasRepo.leaveTable( available );		
+		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 1 ) );
+		
+		mesasRepo.leaveTable( available );		
+		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 2 ) );
+		
 		Pedido pedido = new Pedido();		
 		pedido.setProdutosArrayList( produtosRepo.getProduto( 0 ) );
 		pedido.setProdutosArrayList( produtosRepo.getProduto( 2 ) );

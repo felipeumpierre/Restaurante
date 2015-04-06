@@ -19,10 +19,19 @@ public class MesasRepo
 	
 	public void reserveTable( Mesas mesa, Garcom garcom )
 	{
-		if( mesa.isOccuped() )
+		if( !mesa.isOccuped() )
 		{
 			mesa.setOccuped( true );
 			mesa.setGarcom( garcom );
+			mesa.used();
+		}
+	}
+	
+	public void leaveTable( Mesas mesa )
+	{
+		if( mesa.isOccuped() )
+		{
+			mesa.setOccuped( false );
 		}
 	}
 	

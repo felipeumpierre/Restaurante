@@ -2,7 +2,7 @@ package classe;
 
 public class Mesas 
 {
-	private int number, total;
+	private int number, total, used;
 	private boolean occuped = false;
 	private Pedido pedidos = new Pedido();
 	private Garcom garcom = new Garcom();
@@ -63,8 +63,23 @@ public class Mesas
 		this.garcom = garcom;
 	}
 
+	public int getUsed()
+	{
+		return used;
+	}
+
+	public void used()
+	{
+		this.used++;
+	}
+
 	public String toString()
 	{
+		System.out.println( "Mesa #" + this.getNumber() );
+		System.out.println( "Total de ocupantes: " + this.getTotal() );
+		System.out.println( "Status da mesa: " + ( this.isOccuped() ? "Ocupada" : "Desocupada" ) );
+		System.out.println( "Mesa usada " + this.getUsed() + " vez(es)" + "\n" );
+		
 		System.out.println( "Pedidos: " );
 		System.out.println( this.pedidos.toString() );
 		
