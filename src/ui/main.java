@@ -29,7 +29,11 @@ public class main
 		
 		Pedido pedido = new Pedido();		
 		pedido.setProdutosArrayList( produtosRepo.getProduto( 0 ) );
-		pedido.setProdutosArrayList( produtosRepo.getProduto( 2 ) );
+		pedido.setProdutosArrayList( produtosRepo.getProduto( 6 ) );
+		
+		available.addPedidos( pedido );
+		
+		pedido.setProdutosArrayList( produtosRepo.getProduto( 1 ) );
 		
 		available.addPedidos( pedido );
 		

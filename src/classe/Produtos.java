@@ -2,7 +2,7 @@ package classe;
 
 public class Produtos 
 {
-	private int code;
+	private int code, sale;
 	private String name;
 	private double price;
 	private String[] type = { "comida", "bebida", "sobremesa", "outro" };
@@ -52,6 +52,16 @@ public class Produtos
 	public void setType( String[] type ) 
 	{
 		this.type = type;
+	}
+	
+	public int getSale()
+	{
+		return this.sale;
+	}
+	
+	public void saled()
+	{
+		this.sale++;
 	}
 	
 	public String toString()

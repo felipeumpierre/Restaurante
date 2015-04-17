@@ -1,6 +1,7 @@
 package repositorio;
 
 import java.util.ArrayList;
+
 import classe.Produtos;
 
 public class ProdutosRepo
@@ -21,7 +22,14 @@ public class ProdutosRepo
 	
 	public Produtos getProduto( int index )
 	{
-		return produtosArrayList.get( index );
+		try
+		{
+			return produtosArrayList.get( index );
+		}
+		catch( IndexOutOfBoundsException e )
+		{
+			throw new IndexOutOfBoundsException( "O produto selecionado não existe." );
+		}
 	}
 	
 	private void generateProdutos()
