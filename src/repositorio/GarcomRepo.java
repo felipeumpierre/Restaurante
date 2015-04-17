@@ -27,4 +27,9 @@ public class GarcomRepo
 	{
 		garcomArrayList.remove( index );
 	}
+	
+	public ArrayList<Garcom> getAll()
+	{
+		return garcomArrayList;
+	}
 }

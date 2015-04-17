@@ -51,6 +51,6 @@ public class Garcom
 	{
 		return "\tNome: " + this.getName() + "\n" +
 				"\tCPF: " + this.getCpf() + "\n" +
-				"\tSal√°rio: " + this.getSalary() + "\n";
+				"\tSal·rio: " + this.getSalary() + "\n";
 	}
 }

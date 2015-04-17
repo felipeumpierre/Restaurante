@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import classe.Garcom;
 import classe.Mesas;
 
-
 public class MesasRepo 
 {
 	private ArrayList<Mesas> mesasArrayList;
@@ -13,10 +12,23 @@ public class MesasRepo
 	public MesasRepo()
 	{
 		mesasArrayList = new ArrayList<Mesas>();
-		
-		generateMesas();
 	}
 	
+	public void addMesas( Mesas mesa )
+	{
+		mesasArrayList.add( mesa );
+	}
+	
+	public Mesas getMesa( int index )
+	{
+		return mesasArrayList.get( index );
+	}
+	
+	public int size()
+	{
+		return mesasArrayList.size();
+	}
+		
 	public void reserveTable( Mesas mesa, Garcom garcom )
 	{
 		if( !mesa.isOccuped() )
@@ -47,13 +59,5 @@ public class MesasRepo
 		
 		return null;
 	}
-	
-	private void generateMesas()
-	{
-		mesasArrayList.add( new Mesas( 1, 5 ) );
-		mesasArrayList.add( new Mesas( 2, 2 ) );
-		mesasArrayList.add( new Mesas( 3, 4 ) );
-		mesasArrayList.add( new Mesas( 4, 6 ) );
-		mesasArrayList.add( new Mesas( 5, 2 ) );
-	}
+
 }

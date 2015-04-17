@@ -66,8 +66,8 @@ public class Produtos
 	
 	public String toString()
 	{
-		return "\tProduto #" + this.getCode() + "\n" +
-				"\t\tNome: " + this.getName() + "\n" +
-				"\t\tPreÃ§o: " + this.getPrice() + "\n";
+		return "Produto #" + this.getCode() + "\n" +
+			   "Nome: " + this.getName() + "\n" +
+			   "Preço: " + this.getPrice() + "\n";
 	}
 }
