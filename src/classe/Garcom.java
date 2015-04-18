@@ -49,8 +49,8 @@ public class Garcom
 	
 	public String toString()
 	{
-		return "\tNome: " + this.getName() + "\n" +
-				"\tCPF: " + this.getCpf() + "\n" +
-				"\tSalário: " + this.getSalary() + "\n";
+		return "\nNome: " + this.getName() + "\n" +
+				"CPF: " + this.getCpf() + "\n" +
+				"Salário: " + this.getSalary() + "\n";
 	}
 }

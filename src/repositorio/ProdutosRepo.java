@@ -12,7 +12,7 @@ public class ProdutosRepo
 	{
 		produtosArrayList = new ArrayList<Produtos>();
 		
-		generateProdutos();
+		generate();
 	}
 	
 	public void addProdutos( Produtos produtos )
@@ -32,11 +32,22 @@ public class ProdutosRepo
 		}
 	}
 	
-	private void generateProdutos()
+	public ArrayList<Produtos> getProdutos()
 	{
-		produtosArrayList.add( new Produtos( 1, "Produto #1", 100.00 ) );
-		produtosArrayList.add( new Produtos( 2, "Produto #2", 200.00 ) );
-		produtosArrayList.add( new Produtos( 3, "Produto #3", 300.00 ) );
-		produtosArrayList.add( new Produtos( 4, "Produto #4", 400.00 ) );
+		return produtosArrayList;
+	}
+	
+	public int size()
+	{
+		return produtosArrayList.size();
+	}
+	
+	public void generate()
+	{
+		this.addProdutos( new Produtos( 1, "Produto tal", 10.00 ) );
+		this.addProdutos( new Produtos( 2, "Produto tal2", 10.00 ) );
+		this.addProdutos( new Produtos( 3, "Produto tal3", 10.00 ) );
+		this.addProdutos( new Produtos( 4, "Produto tal4", 10.00 ) );
+		this.addProdutos( new Produtos( 5, "Produto tal5", 10.00 ) );
 	}
 }

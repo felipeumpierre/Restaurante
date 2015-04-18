@@ -2,31 +2,46 @@ package repositorio;
 
 import java.util.ArrayList;
 
-import classe.Garcom;
 import classe.Mesas;
-
+import classe.Pedido;
 
 public class MesasRepo 
 {
 	private ArrayList<Mesas> mesasArrayList;
+	private ArrayList<Pedido> pedidoArrayList;
 
 	public MesasRepo()
 	{
 		mesasArrayList = new ArrayList<Mesas>();
 		
-		generateMesas();
+		generate();
 	}
 	
-	public void reserveTable( Mesas mesa, Garcom garcom )
+	public void addMesas( Mesas mesa )
 	{
-		if( !mesa.isOccuped() )
-		{
-			mesa.setOccuped( true );
-			mesa.setGarcom( garcom );
-			mesa.used();
-		}
+		mesasArrayList.add( mesa );
 	}
 	
+	public Mesas getMesa( int index )
+	{
+		return mesasArrayList.get( index );
+	}
+	
+	public int size()
+	{
+		return mesasArrayList.size();
+	}
+	
+	public ArrayList<Pedido> getPedido()
+	{
+		return pedidoArrayList;
+	}
+
+	public void addPedido( Pedido pedido )
+	{
+		this.pedidoArrayList.add( pedido );
+	}
+
 	public void leaveTable( Mesas mesa )
 	{
 		if( mesa.isOccuped() )
@@ -47,13 +62,12 @@ public class MesasRepo
 		
 		return null;
 	}
-	
-	private void generateMesas()
+
+	public void generate()
 	{
-		mesasArrayList.add( new Mesas( 1, 5 ) );
-		mesasArrayList.add( new Mesas( 2, 2 ) );
-		mesasArrayList.add( new Mesas( 3, 4 ) );
-		mesasArrayList.add( new Mesas( 4, 6 ) );
-		mesasArrayList.add( new Mesas( 5, 2 ) );
+		this.addMesas( new Mesas( 1, 2 ) );
+		this.addMesas( new Mesas( 2, 2 ) );
+		this.addMesas( new Mesas( 3, 4 ) );
+		this.addMesas( new Mesas( 4, 6 ) );
 	}
 }
