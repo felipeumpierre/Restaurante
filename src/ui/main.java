@@ -1,77 +1,47 @@
 package ui;
 
-import repositorio.*;
+import repo.*;
 import util.Console;
-import classe.*;
-import ui.*;
 
-public class main 
+public class main
 {
-	public static MesasRepo mesasRepo = new MesasRepo();
-	public static ProdutosRepo produtosRepo = new ProdutosRepo();
-	public static GarcomRepo garcomRepo = new GarcomRepo();
-	public static PedidoRepo pedidoRepo = new PedidoRepo();
-	public static ReservaRepo reservaRepo = new ReservaRepo();
-	
-	public static void main( String[] args ) 
+	public static void main( String[] args )
 	{
-		menu();
-		
-		/*
-		MesasRepo mesasRepo = new MesasRepo();
-		PedidoRepo pedidoRepo = new PedidoRepo();
-		GarcomRepo garcomRepo = new GarcomRepo();
-		ProdutosRepo produtosRepo = new ProdutosRepo();
-		
-		garcomRepo.addGarcom( new Garcom( "Felipe", "12345", 1000.00 ) );
-		garcomRepo.addGarcom( new Garcom( "Vivian", "12345", 1200.00 ) );
-		garcomRepo.addGarcom( new Garcom( "Eduardo", "12345", 1400.00 ) );
-		
-		// cliente #1
-		Mesas available = mesasRepo.checkTablesWithCapacity( 3 );
-		
-		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 0 ) );
-		
-		mesasRepo.leaveTable( available );		
-		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 1 ) );
-		
-		mesasRepo.leaveTable( available );		
-		mesasRepo.reserveTable( available, garcomRepo.getGarcom( 2 ) );
-		
-		Pedido pedido = new Pedido();		
-		pedido.setProdutosArrayList( produtosRepo.getProduto( 0 ) );
-		pedido.setProdutosArrayList( produtosRepo.getProduto( 6 ) );
-		
-		available.addPedidos( pedido );
-		
-		pedido.setProdutosArrayList( produtosRepo.getProduto( 1 ) );
-		
-		available.addPedidos( pedido );
-		
-		available.toString();
-		*/
+		run();
 	}
-	
-	public static void menu()
+
+	private static void run()
 	{
-		System.out.println( "-------------\nMenu\n" );
-		System.out.println( "1- Menu de Garçom" );
-		System.out.println( "2- Menu de Mesa" );
-		System.out.println( "3- Menu de Produtos" );
-		System.out.println( "4- Menu de Reserva" );
-		System.out.println( "5- Menu de Pedidos" );
-		System.out.println( "6- Gerar Relatórios" );
+		ProductRepo productRepo = new ProductRepo();
+		TableRepo tableRepo = new TableRepo();
+		WaiterRepo waiterRepo = new WaiterRepo();
 		
-		int option = Console.scanInt( "\nEscolha uma opção: " );
+		int opt = 0;
 		
-		switch( option )
+		do
 		{
-			case 1: GarcomUI.menu( garcomRepo ); break;
-			case 2: MesasUI.menu( mesasRepo ); break;
-			case 3: ProdutosUI.menu( produtosRepo ); break;
-			case 4: ReservasUI.menu( reservaRepo, garcomRepo, mesasRepo ); break;
-			case 5: PedidosUI.menu( pedidoRepo, reservaRepo, produtosRepo ); break;
-			case 6: RelatoriosUI.menu( mesasRepo, produtosRepo, garcomRepo ); break;
+			System.out.println( "\n+--------------------------+" );
+			System.out.println( String.format( "| %-24s |", "Menu Inicial" ) );
+			System.out.println( "+--------------------------+" );
+			System.out.println( String.format( "| %-24s |", "1- Menu Mesas" ) );
+			System.out.println( String.format( "| %-24s |", "2- Menu Produtos" ) );
+			System.out.println( String.format( "| %-24s |", "3- Menu Garçons" ) );
+			System.out.println( String.format( "| %-24s |", "4- Restaurante" ) );
+			System.out.println( String.format( "| %-24s |", "0- Sair" ) );
+			System.out.println( "+--------------------------+" );
+			
+			opt = Console.scanInt( "Escolha uma opcao: " );
+			
+			switch( opt )
+			{
+				case 1: new TableUI( tableRepo ).run(); break;
+				case 2: new ProductUI( productRepo ).run(); break;
+				case 3: new WaiterUI( waiterRepo ).run(); break;
+				case 4: new RestaurantUI( tableRepo, productRepo, waiterRepo ).run(); break;
+				case 0: break;
+				default: System.out.println( "\n- Opcao invalida!" ); break;
+			}
 		}
+		while( opt != 0 );
 	}
 }
