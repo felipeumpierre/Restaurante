@@ -1,11 +1,14 @@
 package repo;
 
 import java.util.ArrayList;
+
+import dao.WaiterDaoImpl;
 import entity.Waiter;
 
 public class WaiterRepo
 {
 	private ArrayList<Waiter> waiter;
+	private WaiterDaoImpl dao;
 	
 	public WaiterRepo()
 	{
@@ -16,6 +19,7 @@ public class WaiterRepo
 	
 	public void addWaiter( Waiter w )
 	{
+		dao.insert( w );
 		waiter.add( w );
 	}
 	
@@ -26,12 +30,11 @@ public class WaiterRepo
 	
 	public Waiter getWaiterByName( String name )
 	{
-		for( Waiter w: waiter )
+		Waiter w = dao.findByName( name );
+		
+		if( w instanceof Waiter )
 		{
-			if( w.getName().equalsIgnoreCase( name ) )
-			{
-				return w;
-			}
+			return w;
 		}
 		
 		return null;
