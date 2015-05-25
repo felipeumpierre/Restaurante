@@ -1,11 +1,13 @@
 package repo;
 
 import java.util.ArrayList;
+import dao.ProductDaoImpl;
 import entity.Product;
 
 public class ProductRepo
 {
 	private ArrayList<Product> product;
+	private ProductDaoImpl dao;
 	
 	public ProductRepo()
 	{
@@ -16,7 +18,7 @@ public class ProductRepo
 	
 	public void addProduct( Product p )
 	{
-		product.add( p );
+		dao.insert( p );
 	}
 	
 	public Product getProduct( int index )
@@ -26,12 +28,11 @@ public class ProductRepo
 	
 	public Product getProductByName( String name )
 	{
-		for( Product p: product )
+		Product p = dao.findByName( name );
+		
+		if( p instanceof Product )
 		{
-			if( p.getName().equalsIgnoreCase( name ) )
-			{
-				return p;
-			}
+			return p;
 		}
 		
 		return null;
@@ -39,12 +40,11 @@ public class ProductRepo
 	
 	public Product getProductByCode( int code )
 	{
-		for( Product p: product )
+		Product p = dao.findByCode( code );
+		
+		if( p instanceof Product )
 		{
-			if( code == p.getCode() )
-			{
-				return p;
-			}
+			return p;
 		}
 		
 		return null;

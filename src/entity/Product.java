@@ -2,7 +2,7 @@ package entity;
 
 public class Product
 {
-	private int code;
+	private int code, id;
 	private String name;
 	private double price;
 	
@@ -43,6 +43,16 @@ public class Product
 		this.price = price;
 	}
 	
+	public int getId() 
+	{
+		return id;
+	}
+
+	public void setId( int id ) 
+	{
+		this.id = id;
+	}
+
 	@Override
 	public String toString()
 	{

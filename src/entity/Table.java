@@ -4,7 +4,7 @@ import repo.RequestRepo;
 
 public class Table 
 {
-	private int number, capacity;
+	private int number, capacity, id;
 	private boolean available = true;
 	private RequestRepo request = new RequestRepo();
 
@@ -44,6 +44,16 @@ public class Table
 		this.capacity = capacity;
 	}
 
+	public int getId() 
+	{
+		return id;
+	}
+
+	public void setId( int id ) 
+	{
+		this.id = id;
+	}
+
 	public RequestRepo getRequest() 
 	{
 		return request;
@@ -54,9 +64,10 @@ public class Table
 	{
 		StringBuilder result = new StringBuilder();
 		
+		result.append( String.format( "| %-3s ", this.getId() ) );
 		result.append( String.format( "| %-3s ", this.getNumber() ) );
 		result.append( String.format( "| %-3s ", this.getCapacity() ) );
-		result.append( String.format( "| %-8s |\n", this.isAvailable() ? "Disponível" : "Ocupado" ) );
+		result.append( String.format( "| %-8s |\n", this.isAvailable() ? "Disponivel" : "Ocupado" ) );
 		
 		return result.toString();
 	}

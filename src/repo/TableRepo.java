@@ -1,11 +1,14 @@
 package repo;
 
 import java.util.ArrayList;
+
+import dao.TableDaoImpl;
 import entity.Table;
 
 public class TableRepo 
 {
 	private ArrayList<Table> table;
+	private TableDaoImpl dao;
 	
 	public TableRepo()
 	{
@@ -18,7 +21,7 @@ public class TableRepo
 	{
 		if( !checkTableNumber( t.getNumber() ) )
 		{
-			table.add( t );
+			dao.insert( t );
 			
 			return true;
 		}
@@ -33,12 +36,11 @@ public class TableRepo
 	
 	public Table getTableByNumber( int number )
 	{
-		for( Table t: table )
+		Table t = dao.findByNumber( number );
+		
+		if( t instanceof Table )
 		{
-			if( number == t.getNumber() )
-			{
-				return t;
-			}
+			return t;
 		}
 		
 		return null;

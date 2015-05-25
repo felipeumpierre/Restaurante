@@ -2,6 +2,7 @@ package entity;
 
 public class Waiter 
 {
+	private int id;
 	private String name, cpf;
 	private double salary;
 	
@@ -41,11 +42,22 @@ public class Waiter
 		this.salary = salary;
 	}
 	
+	public int getId() 
+	{
+		return id;
+	}
+
+	public void setId( int id ) 
+	{
+		this.id = id;
+	}
+
 	@Override
 	public String toString()
 	{
 		StringBuilder result = new StringBuilder();
 		
+		result.append( String.format( "| %-3s ", this.getId() ) );
 		result.append( String.format( "| %-12s ", this.getName() ) );
 		result.append( String.format( "| %-8s ", this.getCpf() ) );
 		result.append( String.format( "| %-8s |\n", this.getSalary() ) );
