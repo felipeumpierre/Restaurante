@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 import entity.Table;
 
-public class TableDaoImpl extends Dao implements TableDao
+public class TableDaoImpl extends Dao implements Methods<Table>
 {
 	private PreparedStatement ps;
 	private Connection connect;
