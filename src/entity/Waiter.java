@@ -22,6 +22,7 @@ public class Waiter
 	{
 		this.name = name;
 	}
+	
 	public String getCpf()
 	{
 		return cpf;
@@ -59,7 +60,7 @@ public class Waiter
 		
 		result.append( String.format( "| %-3s ", this.getId() ) );
 		result.append( String.format( "| %-12s ", this.getName() ) );
-		result.append( String.format( "| %-8s ", this.getCpf() ) );
+		result.append( String.format( "| %-12s ", this.getCpf() ) );
 		result.append( String.format( "| %-8s |\n", this.getSalary() ) );
 		
 		return result.toString();

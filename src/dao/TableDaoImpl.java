@@ -4,25 +4,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import entity.Table;
 
-public class TableDaoImpl extends Dao implements Methods<Table>
+public class TableDaoImpl extends Dao implements TableDao
 {
 	private PreparedStatement ps;
 	private Connection connect;
-	
-	private static final String DELETE = "DELETE FROM table WHERE id = ?";
-	private static final String FIND_ALL = "SELECT * FROM table ORDER BY id";
-	private static final String FIND_BY_ID = "SELECT * FROM table WHERE id = ?";
-	private static final String FIND_BY_NUMBER = "SELECT * FROM table WHERE number = ?";
-	private static final String INSERT = "INSERT INTO table ( number, capacity ) VALUES( ?, ? )";
-	private static final String UPDATE = "UPDATE table SET number = ?, capacity = ? WHERE id = ?";
-	
+		
 	public TableDaoImpl()
 	{
-		connect = getConnection();
 	}
 
 	@Override
@@ -30,9 +23,10 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
-			ps = connect.prepareStatement( INSERT );
-			ps.setInt( 0, t.getNumber() );
-			ps.setInt( 1, t.getCapacity() );
+			connect = getConnection();
+			ps = connect.prepareStatement( INSERT, Statement.RETURN_GENERATED_KEYS );
+			ps.setInt( 1, t.getNumber() );
+			ps.setInt( 2, t.getCapacity() );
 			
 			int result = ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
@@ -60,8 +54,9 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( DELETE );
-			ps.setInt( 0, id );
+			ps.setInt( 1, id );
 			
 			return ps.executeUpdate();
 		}
@@ -81,10 +76,11 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( UPDATE );
-			ps.setInt( 0, t.getId() );
-			ps.setInt( 1, t.getNumber() );
-			ps.setInt( 2, t.getCapacity() );
+			ps.setInt( 1, t.getId() );
+			ps.setInt( 2, t.getNumber() );
+			ps.setInt( 3, t.getCapacity() );
 			
 			return ps.executeUpdate();
 		}
@@ -104,6 +100,7 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_ALL );
 			
 			ResultSet rs = ps.executeQuery();
@@ -135,8 +132,9 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_ID );
-			ps.setInt( 0, id );
+			ps.setInt( 1, id );
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -168,8 +166,9 @@ public class TableDaoImpl extends Dao implements Methods<Table>
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_NUMBER );
-			ps.setInt( 0, number );
+			ps.setInt( 1, number );
 			
 			ResultSet rs = ps.executeQuery();
 			

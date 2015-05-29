@@ -52,13 +52,13 @@ public class TableUI
 		{
 			try
 			{
-				number = Console.scanInt( "Número: " );
+				number = Console.scanInt( "Numero: " );
 
 				opt = 0;
 			}
 			catch( InputMismatchException e )
 			{
-				System.out.println( "- Você deve informar um número." );
+				System.out.println( "- Voce deve informar um numero." );
 				
 				opt = 1;
 			}
@@ -77,7 +77,7 @@ public class TableUI
 			}
 			catch( InputMismatchException e )
 			{
-				System.out.println( "- Você deve informar um número para a capacidade." );
+				System.out.println( "- Voce deve informar um numero para a capacidade." );
 				
 				opt = 1;
 			}
@@ -92,7 +92,7 @@ public class TableUI
 		}
 		else
 		{
-			System.out.println( "\nMesa Nro." + number + " já foi cadastrada." );
+			System.out.println( "\nMesa Nro." + number + " ja foi cadastrada." );
 		}
 		
 		System.out.println( "\n--- Fim de cadastro de mesa ---" );

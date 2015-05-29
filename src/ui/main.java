@@ -25,7 +25,7 @@ public class main
 			System.out.println( "+--------------------------+" );
 			System.out.println( String.format( "| %-24s |", "1- Menu Mesas" ) );
 			System.out.println( String.format( "| %-24s |", "2- Menu Produtos" ) );
-			System.out.println( String.format( "| %-24s |", "3- Menu Garçons" ) );
+			System.out.println( String.format( "| %-24s |", "3- Menu Garcons" ) );
 			System.out.println( String.format( "| %-24s |", "4- Restaurante" ) );
 			System.out.println( String.format( "| %-24s |", "0- Sair" ) );
 			System.out.println( "+--------------------------+" );

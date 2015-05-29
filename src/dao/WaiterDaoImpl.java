@@ -13,17 +13,8 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	private PreparedStatement ps;
 	private Connection connect;
 	
-	private static final String DELETE = "DELETE FROM waiter WHERE id = ?";
-	private static final String FIND_ALL = "SELECT * FROM waiter ORDER BY id";
-	private static final String FIND_BY_ID = "SELECT * FROM waiter WHERE id = ?";
-	private static final String FIND_BY_NAME = "SELECT * FROM waiter WHERE name = ?";
-	private static final String FIND_BY_CPF = "SELECT * FROM waiter WHERE cpf = ?";
-	private static final String INSERT = "INSERT INTO waiter ( name, cpf, salary ) VALUES( ?, ?, ? )";
-	private static final String UPDATE = "UPDATE waiter SET name = ?, cpf = ?, Salary = ? WHERE id = ?";
-	
 	public WaiterDaoImpl()
 	{
-		connect = getConnection();
 	}
 	
 	@Override
@@ -31,10 +22,11 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
-			ps = connect.prepareStatement( INSERT );
-			ps.setString( 0, w.getName() );
-			ps.setString( 1, w.getCpf() );
-			ps.setDouble( 2, w.getSalary() );
+			connect = getConnection();
+			ps = connect.prepareStatement( INSERT, ps.RETURN_GENERATED_KEYS );
+			ps.setString( 1, w.getName() );
+			ps.setString( 2, w.getCpf() );
+			ps.setDouble( 3, w.getSalary() );
 			
 			int result = ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
@@ -62,8 +54,9 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( DELETE );
-			ps.setInt( 0, id );
+			ps.setInt( 1, id );
 			
 			return ps.executeUpdate();
 		}
@@ -83,11 +76,12 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( UPDATE );
-			ps.setInt( 0, w.getId() );
-			ps.setString( 1, w.getName() );
-			ps.setString( 2, w.getCpf() );
-			ps.setDouble( 3, w.getSalary() );
+			ps.setInt( 1, w.getId() );
+			ps.setString( 2, w.getName() );
+			ps.setString( 3, w.getCpf() );
+			ps.setDouble( 4, w.getSalary() );
 			
 			return ps.executeUpdate();
 		}
@@ -107,8 +101,9 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_NAME );
-			ps.setString( 0, name );
+			ps.setString( 1, name );
 			
 			ResultSet rs = ps.executeQuery();
 			
@@ -140,6 +135,7 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_ALL );
 			
 			ResultSet rs = ps.executeQuery();
@@ -171,6 +167,7 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_ID );
 			ps.setInt( 0, id );
 			
@@ -204,8 +201,9 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 	{
 		try
 		{
+			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_CPF );
-			ps.setString( 0, cpf );
+			ps.setString( 1, cpf );
 			
 			ResultSet rs = ps.executeQuery();
 			

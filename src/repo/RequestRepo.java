@@ -1,18 +1,16 @@
 package repo;
 
-import java.util.ArrayList;
-
+import dao.ProductDaoImpl;
 import entity.Product;
 import entity.Waiter;
 
 public class RequestRepo
 {
 	private Waiter waiter;
-	private ArrayList<Product> product;
+	private ProductDaoImpl dao;
 	
 	public RequestRepo()
 	{
-		product = new ArrayList<Product>();
 	}
 	
 	public void addWaiter( Waiter w )
@@ -27,12 +25,7 @@ public class RequestRepo
 	
 	public void addProduct( Product p )
 	{
-		product.add( p );
-	}
-	
-	public Product getProduct( int index )
-	{
-		return product.get( index );
+		dao.insert( p );
 	}
 	
 	@Override
@@ -43,19 +36,19 @@ public class RequestRepo
 		if( waiter instanceof Waiter )
 		{
 			result.append( "+--------------+----------+----------+\n" );
-			result.append( String.format( "| %-12s | %-8s | %-8s |\n", "Nome", "CPF", "Salário" ) );
+			result.append( String.format( "| %-12s | %-8s | %-8s |\n", "Nome", "CPF", "Salario" ) );
 			result.append( "+--------------+----------+----------+\n" );
 			result.append( waiter.toString() );
 			result.append( "+--------------+----------+----------+\n" );
 		}
 		
-		if( product.size() > 0 )
+		if( dao.findAll().size() > 0 )
 		{
 			result.append( "+--------------+--------+\n" );
-			result.append( String.format( "| %-12s | %-6s |\n", "Nome", "Preço" ) );
+			result.append( String.format( "| %-12s | %-6s |\n", "Nome", "Preco" ) );
 			result.append( "+--------------+--------+\n" );
 			
-			for( Product p: product )
+			for( Product p: dao.findAll() )
 			{
 				result.append( p.toString() );
 			}

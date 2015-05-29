@@ -1,24 +1,21 @@
 package repo;
 
-import java.util.ArrayList;
-
 import dao.TableDaoImpl;
 import entity.Table;
 
 public class TableRepo 
 {
-	private ArrayList<Table> table;
 	private TableDaoImpl dao;
 	
 	public TableRepo()
 	{
-		table = new ArrayList<Table>();
-		
-		popuplate();
+		dao = new TableDaoImpl();
 	}
 	
 	public boolean addTable( Table t )
 	{
+		dao.insert( t );
+		
 		if( !checkTableNumber( t.getNumber() ) )
 		{
 			dao.insert( t );
@@ -29,9 +26,9 @@ public class TableRepo
 		return false;
 	}
 	
-	public Table getTable( int index )
+	public void save( Table t )
 	{
-		return table.get( index );
+		dao.update( t );
 	}
 	
 	public Table getTableByNumber( int number )
@@ -48,7 +45,7 @@ public class TableRepo
 	
 	public boolean checkTableNumber( int number )
 	{
-		for( Table t: table )
+		for( Table t: dao.findAll() )
 		{
 			if( number == t.getNumber() )
 			{
@@ -61,7 +58,7 @@ public class TableRepo
 	
 	public Table checkAvailableTableByCapacity( int capacity )
 	{
-		for( Table t: table )
+		for( Table t: dao.findAll() )
 		{
 			if( t.getCapacity() >= capacity && t.isAvailable() )
 			{
@@ -77,16 +74,16 @@ public class TableRepo
 	{
 		StringBuilder result = new StringBuilder();
 		
-		result.append( "+-----+-----+--------------+\n" );
-		result.append( String.format( "| %-3s | %-3s | %-12s |\n", "Nr", "Cp", "Status" ) );
-		result.append( "+-----+-----+--------------+\n" );
+		result.append( "+-----+-----+-----+------------+\n" );
+		result.append( String.format( "| %-3s | %-3s | %-3s | %-10s |\n", "Id", "Nr", "Cp", "Status" ) );
+		result.append( "+-----+-----+-----+------------+\n" );
 		
-		for( Table t: table )
+		for( Table t: dao.findAll() )
 		{
 			result.append( t.toString() );
 		}
 		
-		result.append( "+-----+-----+------------+" );
+		result.append( "+-----+-----+-----+----------+" );
 		
 		return result.toString();
 	}
@@ -96,7 +93,7 @@ public class TableRepo
 		StringBuilder result = new StringBuilder();
 		
 		result.append( "+-----+-----+--------------+\n" );
-		result.append( String.format( "| %-3s | %-3s | %-12s |\n", "Nr", "Cp", "Status" ) );
+		result.append( String.format( "| %-3s | %-3s | %-3s | %-12s |\n", "Id", "Nr", "Cp", "Status" ) );
 		result.append( "+-----+-----+--------------+\n" );
 		
 		result.append( t.toString() );
@@ -104,18 +101,5 @@ public class TableRepo
 		result.append( "+-----+-----+--------------+" );
 		
 		return result.toString();
-	}
-
-	private void popuplate()
-	{
-		this.addTable( new Table( 1, 2 ) );
-		this.addTable( new Table( 2, 1 ) );
-		this.addTable( new Table( 3, 1 ) );
-		this.addTable( new Table( 4, 2 ) );
-		this.addTable( new Table( 5, 3 ) );
-		this.addTable( new Table( 6, 4 ) );
-		this.addTable( new Table( 7, 4 ) );
-		this.addTable( new Table( 8, 6 ) );
-		this.addTable( new Table( 9, 8 ) );
 	}
 }

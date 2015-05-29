@@ -22,10 +22,10 @@ public class WaiterUI
 		do
 		{
 			System.out.println( "\n+--------------------------+" );
-			System.out.println( String.format( "| %-24s |", "Menu Garçom" ) );
+			System.out.println( String.format( "| %-24s |", "Menu Garcom" ) );
 			System.out.println( "+--------------------------+" );
-			System.out.println( String.format( "| %-24s |", "1- Adicionar garçom" ) );
-			System.out.println( String.format( "| %-24s |", "2- Listar garçons" ) );
+			System.out.println( String.format( "| %-24s |", "1- Adicionar garcom" ) );
+			System.out.println( String.format( "| %-24s |", "2- Listar garcons" ) );
 			System.out.println( String.format( "| %-24s |", "0- Voltar" ) );
 			System.out.println( "+--------------------------+" );
 			
@@ -43,7 +43,7 @@ public class WaiterUI
 	
 	private void addWaiter()
 	{
-		System.out.println( "\n--- Adicionando novo garçom ---\n" );
+		System.out.println( "\n--- Adicionando novo garcom ---\n" );
 		
 		String name = Console.scanString( "Nome: " );
 		String cpf = Console.scanString( "CPF: " );
@@ -55,13 +55,13 @@ public class WaiterUI
 		{
 			try
 			{
-				salary = Console.scanDouble( "Salário: " );
+				salary = Console.scanDouble( "Salario: " );
 
 				opt = 0;
 			}
 			catch( InputMismatchException e )
 			{
-				System.out.println( "- Você deve informar valor monetário." );
+				System.out.println( "- Você deve informar valor monetario." );
 				
 				opt = 1;
 			}
@@ -69,15 +69,15 @@ public class WaiterUI
 		while( opt != 0 );
 		
 		this.waiter.addWaiter( new Waiter( name, cpf, salary ) );
-		System.out.println( "\nGarçom adicionado com sucesso!" );
+		System.out.println( "\nGarcom adicionado com sucesso!" );
 		
-		System.out.println( "\n--- Fim de cadastro de garçom ---" );
+		System.out.println( "\n--- Fim de cadastro de garcom ---" );
 	}
 	
 	public void listWaiter()
 	{
-		System.out.println( "\n--- Listar garçons ---\n" );	
+		System.out.println( "\n--- Listar garcons ---\n" );	
 		System.out.println( this.waiter.toString() );		
-		System.out.println( "--- Fim da listagem de garçons ---" );
+		System.out.println( "--- Fim da listagem de garcons ---" );
 	}
 }

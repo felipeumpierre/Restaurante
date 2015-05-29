@@ -8,7 +8,7 @@ import java.sql.Statement;
 public abstract class Dao
 {
 	private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
-	private static final String DB_URL = "jdbc:mysql://localhost/ca";
+	private static final String DB_URL = "jdbc:mysql://localhost:3306/restaurante";
 	private static final String ID = "root";
 	private static final String PASS = "";
 

@@ -31,9 +31,9 @@ public class RestaurantUI
 			System.out.println( String.format( "| %-35s |", "Menu Restaurante" ) );
 			System.out.println( "+-------------------------------------+" );
 			System.out.println( String.format( "| %-35s |", "1- Verificar mesa para cliente" ) );
-			System.out.println( String.format( "| %-35s |", "2- Adicionar garçom para mesa" ) );
+			System.out.println( String.format( "| %-35s |", "2- Adicionar garcom para mesa" ) );
 			System.out.println( String.format( "| %-35s |", "3- Adicionar produtos para mesa." ) );
-			System.out.println( String.format( "| %-35s |", "4- Listar informações da mesa." ) );
+			System.out.println( String.format( "| %-35s |", "4- Listar informacoes da mesa." ) );
 			System.out.println( String.format( "| %-35s |", "0- Voltar" ) );
 			System.out.println( "+-------------------------------------+" );
 			
@@ -66,7 +66,7 @@ public class RestaurantUI
 			}
 			catch( InputMismatchException e )
 			{
-				System.out.println( "- Você deve informar o número de pessoas." );
+				System.out.println( "- Voce deve informar o numero de pessoas." );
 				
 				opt = 1;
 			}
@@ -77,16 +77,18 @@ public class RestaurantUI
 		
 		if( t instanceof Table )
 		{
-			System.out.println( "Mesa Nro." + t.getNumber() + " disponível." );
+			System.out.println( "Mesa Nro." + t.getNumber() + " disponivel." );
 			System.out.println( "- Trocando status da mesa nro." + t.getNumber() + " para ocupado.\n" );
 			
 			t.setAvailable( false );
+			
+			table.save( t );
 			
 			opt = 0;
 			
 			do
 			{
-				String cpf = Console.scanString( "Informe o CPF do garçom que vai atender esta mesa: " );
+				String cpf = Console.scanString( "Informe o CPF do garcom que vai atender esta mesa: " );
 				
 				Waiter w = waiter.getWaiterByCpf( cpf );
 				
@@ -94,11 +96,11 @@ public class RestaurantUI
 				{	
 					t.getRequest().addWaiter( w );
 					
-					System.out.println( "O Garçom " + w.getName() + " está atendendo esta mesa.\n" );
+					System.out.println( "O Garcom " + w.getName() + " esta atendendo esta mesa.\n" );
 				}
 				else
 				{
-					System.out.println( "Não foi encontrado nenhum garçom." );
+					System.out.println( "Nao foi encontrado nenhum garcom." );
 					opt = Console.scanInt( "1- Tentar novamente\n0- Sair\nInforme a opcao: " );
 				}
 			}
@@ -114,14 +116,14 @@ public class RestaurantUI
 			System.out.println( "Nenhuma mesa foi encontrada para a quantidade de pessoas informadas." );
 		}
 		
-		System.out.println( "\n---- Fim da verificação de mesa para cliente ----" );
+		System.out.println( "\n---- Fim da verificacao de mesa para cliente ----" );
 	}
 
 	public void addWaiter()
 	{
-		System.out.println( "\n---- Adicionando garçom para uma mesa ----" );
+		System.out.println( "\n---- Adicionando garcom para uma mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o número da mesa: ", "- Você deve informar o número da mesa." );
+		int number = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
 		
 		Table t = table.getTableByNumber( number );
 		
@@ -129,28 +131,28 @@ public class RestaurantUI
 		{
 			if( t.getRequest().getWaiter() instanceof Waiter )
 			{
-				System.out.println( "Esta mesa já possui um garçom." );
+				System.out.println( "Esta mesa ja possui um garcom." );
 			}
 			else
 			{
-				String cpf = Console.scanString( "Informe o CPF do garçom: " );
+				String cpf = Console.scanString( "Informe o CPF do garcom: " );
 				
 				Waiter w = waiter.getWaiterByCpf( cpf );
 				
 				t.getRequest().addWaiter( w );
 				
-				System.out.println( "Garçom adicionado com sucesso!" );
+				System.out.println( "Garcom adicionado com sucesso!" );
 			}
 		}
 		
-		System.out.println( "\n---- Fim da adição de um garçom para uma mesa ----" );
+		System.out.println( "\n---- Fim da adicao de um garcom para uma mesa ----" );
 	}
 	
 	public void addProductToTable()
 	{
 		System.out.println( "\n---- Adicionando produtos para uma mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o número da mesa: ", "- Você deve informar o número da mesa." );
+		int number = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
 		
 		Table t = table.getTableByNumber( number );
 		
@@ -160,17 +162,17 @@ public class RestaurantUI
 		}
 		else
 		{
-			System.out.println( "\n- Não foi encontrado a mesa nro." + number );
+			System.out.println( "\n- Nao foi encontrado a mesa nro." + number );
 		}
 		
-		System.out.println( "\n---- Fim da adição de produtos para uma mesa ----" );
+		System.out.println( "\n---- Fim da adicao de produtos para uma mesa ----" );
 	}
 	
 	public void listTable()
 	{
-		System.out.println( "\n---- Listando informações da mesa ----" );
+		System.out.println( "\n---- Listando informacoes da mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o número da mesa: " , "- Você deve informar o número da mesa." );
+		int number = inputCheckTableNumber( "Informe o numero da mesa: " , "- Voce deve informar o numero da mesa." );
 		
 		Table t = table.getTableByNumber( number );
 		
@@ -180,7 +182,7 @@ public class RestaurantUI
 			System.out.println( t.getRequest().toString() );
 		}
 		
-		System.out.println( "\n---- Fim da listagem das informações da mesa ----" );
+		System.out.println( "\n---- Fim da listagem das informacoes da mesa ----" );
 	}
 	
 	
@@ -217,7 +219,7 @@ public class RestaurantUI
 		
 		do
 		{
-			int code = inputCheckTableNumber( "\nInforme o código do produto | 0- Sair: ", "- Você deve informar um número." );
+			int code = inputCheckTableNumber( "\nInforme o codigo do produto | 0- Sair: ", "- Voce deve informar um numero." );
 			
 			if( code != 0 )
 			{
@@ -231,7 +233,7 @@ public class RestaurantUI
 				}
 				else
 				{
-					System.out.println( "- Produto não encontrado." );
+					System.out.println( "- Produto nao encontrado." );
 				}
 				
 				opt = 1;
@@ -243,6 +245,6 @@ public class RestaurantUI
 		}
 		while( opt != 0 );
 		
-		System.out.println( "\n---- Fim da adição de produtos para um pedido ----" );
+		System.out.println( "\n---- Fim da adicao de produtos para um pedido ----" );
 	}
 }
