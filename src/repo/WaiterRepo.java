@@ -29,6 +29,18 @@ public class WaiterRepo
 		return null;
 	}
 	
+	public Waiter getWaiterById( int id )
+	{
+		Waiter w = dao.findById( id );
+		
+		if( w instanceof Waiter )
+		{
+			return w;
+		}
+		
+		return null;
+	}
+	
 	public Waiter getWaiterByCpf( String cpf )
 	{
 		for( Waiter w: dao.findAll() )
@@ -48,12 +60,19 @@ public class WaiterRepo
 		StringBuilder result = new StringBuilder();
 		
 		result.append( "+-----+--------------+--------------+----------+\n" );
-		result.append( String.format( "| %-3s | %-12s | %-12s | %-8s |\n", "Id", "Nome", "Cpf", "Salário" ) );
+		result.append( String.format( "| %-3s | %-12s | %-12s | %-8s |\n", "Id", "Nome", "CPF", "Salario" ) );
 		result.append( "+-----+--------------+--------------+----------+\n" );
 		
-		for( Waiter w: dao.findAll() )
+		if( dao.findAll().size() > 0 )
 		{
-			result.append( w.toString() );
+			for( Waiter w: dao.findAll() )
+			{
+				result.append( w.toString() );
+			}
+		}
+		else
+		{
+			result.append( String.format( "| %-44s |\n", "Nenhum resultado encontrado" ) );
 		}
 		
 		result.append( "+-----+--------------+--------------+----------+\n" );

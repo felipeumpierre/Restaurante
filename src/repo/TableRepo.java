@@ -14,8 +14,6 @@ public class TableRepo
 	
 	public boolean addTable( Table t )
 	{
-		dao.insert( t );
-		
 		if( !checkTableNumber( t.getNumber() ) )
 		{
 			dao.insert( t );
@@ -60,7 +58,7 @@ public class TableRepo
 	{
 		for( Table t: dao.findAll() )
 		{
-			if( t.getCapacity() >= capacity && t.isAvailable() )
+			if( t.getCapacity() >= capacity && ( t.getAvailable() == 1 ) )
 			{
 				return t;
 			}
@@ -78,12 +76,19 @@ public class TableRepo
 		result.append( String.format( "| %-3s | %-3s | %-3s | %-10s |\n", "Id", "Nr", "Cp", "Status" ) );
 		result.append( "+-----+-----+-----+------------+\n" );
 		
-		for( Table t: dao.findAll() )
+		if( dao.findAll().size() > 0 )
 		{
-			result.append( t.toString() );
+			for( Table t: dao.findAll() )
+			{
+				result.append( t.toString() );
+			}
+		}
+		else
+		{
+			result.append( String.format( "| %-24s |\n", "Nenhum resultado encontrado" ) );
 		}
 		
-		result.append( "+-----+-----+-----+----------+" );
+		result.append( "+-----+-----+-----+------------+\n" );
 		
 		return result.toString();
 	}
@@ -92,13 +97,13 @@ public class TableRepo
 	{
 		StringBuilder result = new StringBuilder();
 		
-		result.append( "+-----+-----+--------------+\n" );
-		result.append( String.format( "| %-3s | %-3s | %-3s | %-12s |\n", "Id", "Nr", "Cp", "Status" ) );
-		result.append( "+-----+-----+--------------+\n" );
+		result.append( "+-----+-----+-----+------------+\n" );
+		result.append( String.format( "| %-3s | %-3s | %-3s | %-10s |\n", "Id", "Nr", "Cp", "Status" ) );
+		result.append( "+-----+-----+-----+------------+\n" );
 		
 		result.append( t.toString() );
 		
-		result.append( "+-----+-----+--------------+" );
+		result.append( "+-----+-----+-----+------------+\n" );
 		
 		return result.toString();
 	}

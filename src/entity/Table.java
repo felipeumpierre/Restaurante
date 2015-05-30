@@ -4,8 +4,7 @@ import repo.RequestRepo;
 
 public class Table 
 {
-	private int number, capacity, id;
-	private boolean available = true;
+	private int number, capacity, id, available;
 	private RequestRepo request = new RequestRepo();
 
 	public Table( int number, int capacity )
@@ -14,12 +13,12 @@ public class Table
 		this.setCapacity( capacity );
 	}
 	
-	public boolean isAvailable() 
+	public int getAvailable() 
 	{
 		return available;
 	}
 
-	public void setAvailable( boolean available ) 
+	public void setAvailable( int available ) 
 	{
 		this.available = available;
 	}
@@ -58,7 +57,7 @@ public class Table
 	{
 		return request;
 	}
-
+	
 	@Override
 	public String toString()
 	{
@@ -67,7 +66,7 @@ public class Table
 		result.append( String.format( "| %-3s ", this.getId() ) );
 		result.append( String.format( "| %-3s ", this.getNumber() ) );
 		result.append( String.format( "| %-3s ", this.getCapacity() ) );
-		result.append( String.format( "| %-8s |\n", this.isAvailable() ? "Disponivel" : "Ocupado" ) );
+		result.append( String.format( "| %-10s |\n", this.getAvailable() == 1 ? "Disponivel" : "Ocupado" ) );
 		
 		return result.toString();
 	}

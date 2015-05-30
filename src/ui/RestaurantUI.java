@@ -1,9 +1,12 @@
 package ui;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 
 import entity.Product;
 import entity.Table;
+import entity.TableRequest;
+import entity.TableRequestProduct;
 import entity.Waiter;
 import repo.*;
 import util.Console;
@@ -13,6 +16,8 @@ public class RestaurantUI
 	private TableRepo table = new TableRepo();
 	private WaiterRepo waiter = new WaiterRepo();
 	private ProductRepo product = new ProductRepo();
+	private TableRequestRepo tableRequestRepo = new TableRequestRepo();
+	private TableRequestProductRepo tableRequestProductRepo = new TableRequestProductRepo();
 	
 	public RestaurantUI( TableRepo t, ProductRepo p, WaiterRepo w )
 	{
@@ -74,13 +79,14 @@ public class RestaurantUI
 		while( opt != 0 );
 		
 		Table t = table.checkAvailableTableByCapacity( capacity );
+		TableRequest tr = new TableRequest();
 		
 		if( t instanceof Table )
 		{
-			System.out.println( "Mesa Nro." + t.getNumber() + " disponivel." );
+			System.out.println( "\nMesa Nro." + t.getNumber() + " disponivel." );
 			System.out.println( "- Trocando status da mesa nro." + t.getNumber() + " para ocupado.\n" );
 			
-			t.setAvailable( false );
+			t.setAvailable( 1 );
 			
 			table.save( t );
 			
@@ -94,22 +100,19 @@ public class RestaurantUI
 				
 				if( w instanceof Waiter )
 				{	
-					t.getRequest().addWaiter( w );
+					tr.setId( tableRequestRepo.add( t, w ) );
 					
-					System.out.println( "O Garcom " + w.getName() + " esta atendendo esta mesa.\n" );
+					System.out.println( "\nO Garcom " + w.getName() + " esta atendendo esta mesa." );
 				}
 				else
 				{
-					System.out.println( "Nao foi encontrado nenhum garcom." );
+					System.out.println( "Nao foi encontrado nenhum garcom.\n" );
 					opt = Console.scanInt( "1- Tentar novamente\n0- Sair\nInforme a opcao: " );
 				}
 			}
 			while( opt != 0 );
 			
-			addProduct( t );
-			
-			System.out.println( t.toString() );
-			System.out.println( t.getRequest().toString() );
+			addProduct( t, tr );
 		}
 		else
 		{
@@ -123,13 +126,15 @@ public class RestaurantUI
 	{
 		System.out.println( "\n---- Adicionando garcom para uma mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
+		int id = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
 		
-		Table t = table.getTableByNumber( number );
+		TableRequest tr = tableRequestRepo.findByTableId( id );
 		
-		if( t instanceof Table )
+		if( null != tr )
 		{
-			if( t.getRequest().getWaiter() instanceof Waiter )
+			Waiter w = waiter.getWaiterById( tr.getWaiterId() );
+			
+			if( w instanceof Waiter )
 			{
 				System.out.println( "Esta mesa ja possui um garcom." );
 			}
@@ -137,12 +142,19 @@ public class RestaurantUI
 			{
 				String cpf = Console.scanString( "Informe o CPF do garcom: " );
 				
-				Waiter w = waiter.getWaiterByCpf( cpf );
+				Waiter wtr = waiter.getWaiterByCpf( cpf );
+				tr.setWaiterId( wtr.getId() );
 				
-				t.getRequest().addWaiter( w );
-				
+				tableRequestRepo.save( tr );
+								
 				System.out.println( "Garcom adicionado com sucesso!" );
 			}
+		}
+		else
+		{
+			System.out.println( "Você ainda não vinculou essa mesa com um cliente." );
+			
+			checkTableAvailableAndCapacity();
 		}
 		
 		System.out.println( "\n---- Fim da adicao de um garcom para uma mesa ----" );
@@ -152,17 +164,28 @@ public class RestaurantUI
 	{
 		System.out.println( "\n---- Adicionando produtos para uma mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
+		int id = inputCheckTableNumber( "Informe o numero da mesa: ", "- Voce deve informar o numero da mesa." );
 		
-		Table t = table.getTableByNumber( number );
+		TableRequest tr = tableRequestRepo.findByTableId( id );
 		
-		if( t instanceof Table )
+		if( null != tr )
 		{
-			addProduct( t );
+			Table t = table.getTableByNumber( tr.getTableId() );
+			
+			if( t instanceof Table )
+			{
+				addProduct( t, tr );
+			}
+			else
+			{
+				System.out.println( "\n- Nao foi encontrado a mesa nro." + id );
+			}
 		}
 		else
 		{
-			System.out.println( "\n- Nao foi encontrado a mesa nro." + number );
+			System.out.println( "Você ainda não vinculou essa mesa com um cliente." );
+			
+			checkTableAvailableAndCapacity();
 		}
 		
 		System.out.println( "\n---- Fim da adicao de produtos para uma mesa ----" );
@@ -172,19 +195,29 @@ public class RestaurantUI
 	{
 		System.out.println( "\n---- Listando informacoes da mesa ----" );
 		
-		int number = inputCheckTableNumber( "Informe o numero da mesa: " , "- Voce deve informar o numero da mesa." );
+		int id = inputCheckTableNumber( "Informe o numero da mesa: " , "- Voce deve informar o numero da mesa." );
 		
-		Table t = table.getTableByNumber( number );
+		TableRequest tr = tableRequestRepo.findByTableId( id );
+		ArrayList<TableRequestProduct> trp = tableRequestProductRepo.findByTableRequestId( tr.getId() );
 		
-		if( t instanceof Table )
+		if( trp.size() > 0 )
 		{
+			Table t = table.getTableByNumber( id );
+			
+			System.out.println( "\n" );
 			System.out.println( table.toStringByTable( t ) );
-			System.out.println( t.getRequest().toString() );
+			
+			for( TableRequestProduct t_r : trp )
+			{
+				Product p = product.getProductById( t_r.getProductId() );
+				product.addProductToArray( p );
+			}
+			
+			System.out.println( product.toStringArray() );
 		}
 		
 		System.out.println( "\n---- Fim da listagem das informacoes da mesa ----" );
 	}
-	
 	
 	private int inputCheckTableNumber( String scan, String error )
 	{
@@ -211,7 +244,7 @@ public class RestaurantUI
 		return number;
 	}
 	
-	private void addProduct( Table t )
+	private void addProduct( Table t, TableRequest tr )
 	{
 		System.out.println( "\n---- Adicionando produtos para um pedido ----" );
 		
@@ -227,7 +260,7 @@ public class RestaurantUI
 				
 				if( p instanceof Product )
 				{
-					t.getRequest().addProduct( p );
+					tableRequestProductRepo.add( tr, p );
 					
 					System.out.println( "- Produto " + p.getName() + " adicionado com sucesso!" );
 				}

@@ -81,6 +81,7 @@ public class TableDaoImpl extends Dao implements TableDao
 			ps.setInt( 1, t.getId() );
 			ps.setInt( 2, t.getNumber() );
 			ps.setInt( 3, t.getCapacity() );
+			ps.setInt( 4, t.getAvailable() );
 			
 			return ps.executeUpdate();
 		}
@@ -142,6 +143,7 @@ public class TableDaoImpl extends Dao implements TableDao
 			{
 				Table table = new Table( rs.getInt( "number" ), rs.getInt( "capacity" ) );
 				table.setId( rs.getInt( "id" ) );
+				table.setAvailable( rs.getInt( "available" ) );
 				
 				return table;
 			}

@@ -1,5 +1,6 @@
 package dao;
 
+import java.sql.Statement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,7 +24,7 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 		try
 		{
 			connect = getConnection();
-			ps = connect.prepareStatement( INSERT, ps.RETURN_GENERATED_KEYS );
+			ps = connect.prepareStatement( INSERT, Statement.RETURN_GENERATED_KEYS );
 			ps.setString( 1, w.getName() );
 			ps.setString( 2, w.getCpf() );
 			ps.setDouble( 3, w.getSalary() );
@@ -169,7 +170,7 @@ public class WaiterDaoImpl extends Dao implements WaiterDao
 		{
 			connect = getConnection();
 			ps = connect.prepareStatement( FIND_BY_ID );
-			ps.setInt( 0, id );
+			ps.setInt( 1, id );
 			
 			ResultSet rs = ps.executeQuery();
 			

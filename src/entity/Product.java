@@ -58,8 +58,10 @@ public class Product
 	{
 		StringBuilder result = new StringBuilder();
 		
+		result.append( String.format( "| %-3s ", this.getId() ) );
+		result.append( String.format( "| %-6s ", this.getCode() ) );
 		result.append( String.format( "| %-12s ", this.getName() ) );
-		result.append( String.format( "| %-6s |\n", this.getPrice() ) );
+		result.append( String.format( "| %-8s |\n", this.getPrice() ) );
 		
 		return result.toString();
 	}

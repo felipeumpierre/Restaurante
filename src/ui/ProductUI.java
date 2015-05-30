@@ -35,6 +35,7 @@ public class ProductUI
 			{
 				case 1: addProduct(); break;
 				case 2: listProduct(); break;
+				case 0: break;
 				default: System.out.println( "\n- Opcao invalida!" ); break;
 			}
 		}

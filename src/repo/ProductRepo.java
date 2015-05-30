@@ -1,23 +1,29 @@
 package repo;
 
+import java.util.ArrayList;
+
 import dao.ProductDaoImpl;
 import entity.Product;
-import entity.Table;
 
 public class ProductRepo
 {
 	private ProductDaoImpl dao;
+	private ArrayList<Product> product;
 	
 	public ProductRepo()
 	{
+		product = new ArrayList<Product>();
 		dao = new ProductDaoImpl();
-		
-		populate();
 	}
 	
 	public void addProduct( Product p )
 	{
 		dao.insert( p );
+	}
+	
+	public void addProductToArray( Product p )
+	{
+		product.add( p );
 	}
 	
 	public Product getProduct( int index )
@@ -28,6 +34,18 @@ public class ProductRepo
 	public Product getProductByName( String name )
 	{
 		Product p = dao.findByName( name );
+		
+		if( p instanceof Product )
+		{
+			return p;
+		}
+		
+		return null;
+	}
+
+	public Product getProductById( int id )
+	{
+		Product p = dao.findById( id );
 		
 		if( p instanceof Product )
 		{
@@ -54,22 +72,51 @@ public class ProductRepo
 	{
 		StringBuilder result = new StringBuilder();
 		
-		result.append( "+-----+-----+--------------+\n" );
-		result.append( String.format( "| %-3s | %-3s | %-3s | %-12s |\n", "Id", "Nr", "Cp", "Status" ) );
-		result.append( "+-----+-----+--------------+\n" );
+		result.append( "+-----+--------+--------------+----------+\n" );
+		result.append( String.format( "| %-3s | %-6s | %-12s | %-8s |\n", "Id", "Código", "Nome", "Preço" ) );
+		result.append( "+-----+--------+--------------+----------+\n" );
 		
-		for( Product p: dao.findAll() )
+		if( dao.findAll().size()> 0 )
 		{
-			result.append( p.toString() );
+			for( Product p: dao.findAll() )
+			{
+				result.append( p.toString() );
+			}
 		}
-		
-		result.append( "+-----+-----+--------------+\n" );
+		else
+		{
+			result.append( String.format( "| %-30s |\n", "Nenhum resultado encontrado" ) );
+		}
+			
+		result.append( "+-----+--------+--------------+----------+" );
 		
 		return result.toString();
 	}
-
-	private void populate()
+	
+	public String toStringArray()
 	{
-		this.addProduct( new Product( 1, "Produto #1", 100.00 ) );
+		StringBuilder result = new StringBuilder();
+		
+		result.append( "+-----+--------+--------------+----------+\n" );
+		result.append( String.format( "| %-3s | %-6s | %-12s | %-8s |\n", "Id", "Código", "Nome", "Preço" ) );
+		result.append( "+-----+--------+--------------+----------+\n" );
+		
+		if( product.size()> 0 )
+		{
+			for( Product p: product )
+			{
+				result.append( p.toString() );
+			}
+		}
+		else
+		{
+			result.append( String.format( "| %-30s |\n", "Nenhum resultado encontrado" ) );
+		}
+			
+		result.append( "+-----+--------+--------------+----------+" );
+		
+		product.clear();
+		
+		return result.toString();
 	}
 }

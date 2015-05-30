@@ -35,6 +35,7 @@ public class TableUI
 			{
 				case 1: addTable(); break;
 				case 2: listTable(); break;
+				case 0: break;
 				default: System.out.println( "\n- Opcao invalida!" ); break;
 			}
 		}
