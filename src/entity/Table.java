@@ -1,73 +1,55 @@
 package entity;
 
-import repo.RequestRepo;
+public class Table {
 
-public class Table 
-{
-	private int number, capacity, id, available;
-	private RequestRepo request = new RequestRepo();
+    private int number, capacity, id, available;
 
-	public Table( int number, int capacity )
-	{
-		this.setNumber( number );
-		this.setCapacity( capacity );
-	}
-	
-	public int getAvailable() 
-	{
-		return available;
-	}
+    public Table(int number, int capacity) {
+        this.setNumber(number);
+        this.setCapacity(capacity);
+    }
 
-	public void setAvailable( int available ) 
-	{
-		this.available = available;
-	}
+    public int getAvailable() {
+        return available;
+    }
 
-	public int getNumber() 
-	{
-		return number;
-	}
+    public void setAvailable(int available) {
+        this.available = available;
+    }
 
-	public void setNumber( int number ) 
-	{
-		this.number = number;
-	}
+    public int getNumber() {
+        return number;
+    }
 
-	public int getCapacity()
-	{
-		return capacity;
-	}
+    public void setNumber(int number) {
+        this.number = number;
+    }
 
-	public void setCapacity( int capacity ) 
-	{
-		this.capacity = capacity;
-	}
+    public int getCapacity() {
+        return capacity;
+    }
 
-	public int getId() 
-	{
-		return id;
-	}
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
 
-	public void setId( int id ) 
-	{
-		this.id = id;
-	}
+    public int getId() {
+        return id;
+    }
 
-	public RequestRepo getRequest() 
-	{
-		return request;
-	}
-	
-	@Override
-	public String toString()
-	{
-		StringBuilder result = new StringBuilder();
-		
-		result.append( String.format( "| %-3s ", this.getId() ) );
-		result.append( String.format( "| %-3s ", this.getNumber() ) );
-		result.append( String.format( "| %-3s ", this.getCapacity() ) );
-		result.append( String.format( "| %-10s |\n", this.getAvailable() == 1 ? "Disponivel" : "Ocupado" ) );
-		
-		return result.toString();
-	}
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        result.append(String.format("| %-3s ", this.getId()));
+        result.append(String.format("| %-3s ", this.getNumber()));
+        result.append(String.format("| %-3s ", this.getCapacity()));
+        result.append(String.format("| %-10s |\n", this.getAvailable() == 1 ? "Disponivel" : "Ocupado"));
+
+        return result.toString();
+    }
 }

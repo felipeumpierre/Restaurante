@@ -6,228 +6,164 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import entity.Waiter;
 
-public class WaiterDaoImpl extends Dao implements WaiterDao
-{
+public class WaiterDaoImpl extends Dao implements WaiterDao {
 	private PreparedStatement ps;
 	private Connection connect;
-	
-	public WaiterDaoImpl()
-	{
-	}
-	
-	@Override
-	public int insert( Waiter w )
-	{
-		try
-		{
+
+	public int insert(Waiter w) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( INSERT, Statement.RETURN_GENERATED_KEYS );
-			ps.setString( 1, w.getName() );
-			ps.setString( 2, w.getCpf() );
-			ps.setDouble( 3, w.getSalary() );
-			
+			ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, w.getName());
+			ps.setString(2, w.getCpf());
+			ps.setDouble(3, w.getSalary());
+
 			int result = ps.executeUpdate();
 			ResultSet rs = ps.getGeneratedKeys();
-			
-			if( rs.next() )
-			{
-				w.setId( rs.getInt( 1 ) );
+
+			if (rs.next()) {
+				w.setId(rs.getInt(1));
 			}
-			
+
 			return result;
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public int delete( int id )
-	{
-		try
-		{
+	public int delete(Waiter w) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( DELETE );
-			ps.setInt( 1, id );
-			
+			ps = connect.prepareStatement(DELETE);
+			ps.setString(1, w.getCpf());
+
 			return ps.executeUpdate();
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public int update( Waiter w )
-	{
-		try
-		{
+	public int update(Waiter w) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( UPDATE );
-			ps.setInt( 1, w.getId() );
-			ps.setString( 2, w.getName() );
-			ps.setString( 3, w.getCpf() );
-			ps.setDouble( 4, w.getSalary() );
-			
+			ps = connect.prepareStatement(UPDATE);
+			ps.setInt(1, w.getId());
+			ps.setString(2, w.getName());
+			ps.setString(3, w.getCpf());
+			ps.setDouble(4, w.getSalary());
+
 			return ps.executeUpdate();
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public Waiter findByName( String name )
-	{
-		try
-		{
+	public Waiter findByName(String name) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( FIND_BY_NAME );
-			ps.setString( 1, name );
-			
+			ps = connect.prepareStatement(FIND_BY_NAME);
+			ps.setString(1, name);
+
 			ResultSet rs = ps.executeQuery();
-			
-			if( rs.next() )
-			{
-				Waiter waiter = new Waiter( rs.getString( "name" ), rs.getString( "cpf" ), rs.getDouble( "salary" ) );
-				waiter.setId( rs.getInt( "id" ) );
-				
+
+			if (rs.next()) {
+				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+				waiter.setId(rs.getInt("id"));
+
 				return waiter;
-			}
-			else
-			{
+			} else {
 				return null;
 			}
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public ArrayList<Waiter> findAll()
-	{
-		try
-		{
+	public List<Waiter> findAll() {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( FIND_ALL );
-			
+			ps = connect.prepareStatement(FIND_ALL);
+
 			ResultSet rs = ps.executeQuery();
-			ArrayList<Waiter> w = new ArrayList<Waiter>();
-			
-			while( rs.next() )
-			{
-				Waiter waiter = new Waiter( rs.getString( "name" ), rs.getString( "cpf" ), rs.getDouble( "salary" ) );
-				waiter.setId( rs.getInt( "id" ) );
-				
-				w.add( waiter );
+			List<Waiter> w = new ArrayList<Waiter>();
+
+			while (rs.next()) {
+				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+				waiter.setId(rs.getInt("id"));
+
+				w.add(waiter);
 			}
-			
+
 			return w;
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public Waiter findById( int id )
-	{
-		try
-		{
+	public Waiter findById(int id) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( FIND_BY_ID );
-			ps.setInt( 1, id );
-			
+			ps = connect.prepareStatement(FIND_BY_ID);
+			ps.setInt(1, id);
+
 			ResultSet rs = ps.executeQuery();
-			
-			if( rs.next() )
-			{
-				Waiter waiter = new Waiter( rs.getString( "name" ), rs.getString( "cpf" ), rs.getDouble( "salary" ) );
-				waiter.setId( rs.getInt( "id" ) );
-				
+
+			if (rs.next()) {
+				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+				waiter.setId(rs.getInt("id"));
+
 				return waiter;
-			}
-			else
-			{
+			} else {
 				return null;
 			}
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 
-	@Override
-	public Waiter findByCpf( String cpf ) 
-	{
-		try
-		{
+	public Waiter findByCpf(String cpf) {
+		try {
 			connect = getConnection();
-			ps = connect.prepareStatement( FIND_BY_CPF );
-			ps.setString( 1, cpf );
-			
+			ps = connect.prepareStatement(FIND_BY_CPF);
+			ps.setString(1, cpf);
+
 			ResultSet rs = ps.executeQuery();
-			
-			if( rs.next() )
-			{
-				Waiter waiter = new Waiter( rs.getString( "name" ), rs.getString( "cpf" ), rs.getDouble( "salary" ) );
-				waiter.setId( rs.getInt( "id" ) );
-				
+
+			if (rs.next()) {
+				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+				waiter.setId(rs.getInt("id"));
+
 				return waiter;
-			}
-			else
-			{
+			} else {
 				return null;
 			}
-		}
-		catch( SQLException e )
-		{
-			throw new RuntimeException( e );
-		}
-		finally
-		{
-			close( ps );
-			close( connect );
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		} finally {
+			close(ps);
+			close(connect);
 		}
 	}
 }
