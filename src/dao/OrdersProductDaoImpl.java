@@ -1,35 +1,48 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
+import static dao.Dao.close;
+import static dao.OrdersProductDao.*;
+import entity.Orders;
+import entity.OrdersProduct;
+
+import entity.Product;
+import facade.FacadeOrders;
+import facade.FacadeProduct;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-
-import entity.Table;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class TableDaoImpl extends Dao implements TableDao {
-
+/**
+ *
+ * @author Felipe
+ */
+public class OrdersProductDaoImpl extends Dao implements OrdersProductDao {
    private PreparedStatement ps;
    private Connection connect;
    private DateFormat dateFormat;
 
-   public TableDaoImpl() {
+   public OrdersProductDaoImpl() {
       dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    }
 
-   public int insert(Table t) {
+   public int insert(Orders o, Product p) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-         ps.setInt(1, t.getNumber());
-         ps.setInt(2, t.getCapacity());
-         ps.setString(3, this.dateFormat.format(new Date()));
+         ps.setInt(1, o.getId());
+         ps.setInt(2, p.getId());
 
          int result = ps.executeUpdate();
 
@@ -48,11 +61,11 @@ public class TableDaoImpl extends Dao implements TableDao {
       }
    }
 
-   public int delete(Table t) {
+   public int delete(OrdersProduct op) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(DELETE);
-         ps.setInt(1, t.getNumber());
+         ps.setInt(1, op.getId());
 
          return ps.executeUpdate();
       } catch (SQLException e) {
@@ -63,40 +76,22 @@ public class TableDaoImpl extends Dao implements TableDao {
       }
    }
 
-   public int update(Table t) {
+   public List<Product> findAllProductsFromOrders(Orders o) {
       try {
          connect = getConnection();
-         ps = connect.prepareStatement(UPDATE);
-         ps.setInt(1, t.getCapacity());
-         ps.setInt(2, t.getNumber());
-         ps.setInt(3, t.getStatus());
-         ps.setInt(4, t.getId());
-
-         return ps.executeUpdate();
-      } catch (SQLException e) {
-         throw new RuntimeException(e);
-      } finally {
-         close(ps);
-         close(connect);
-      }
-   }
-
-   public List<Table> findAll() {
-      try {
-         connect = getConnection();
-         ps = connect.prepareStatement(FIND_ALL);
+         ps = connect.prepareStatement(FIND_ALL_PRODUCTS_FROM_ORDERS);
+         ps.setInt(1, o.getId());
 
          ResultSet rs = ps.executeQuery();
-         List<Table> t = new ArrayList<Table>();
+         List<Product> p = new ArrayList<Product>();
 
+         FacadeProduct facadeProduct = new FacadeProduct();
+         
          while (rs.next()) {
-            Table table = new Table(rs.getInt("number"), rs.getInt("capacity"));
-            table.setId(rs.getInt("id"));
-
-            t.add(table);
+            p.add(facadeProduct.listById(rs.getInt("product_id")));
          }
 
-         return t;
+         return p;
       } catch (SQLException e) {
          throw new RuntimeException(e);
       } finally {
@@ -105,7 +100,31 @@ public class TableDaoImpl extends Dao implements TableDao {
       }
    }
 
-   public Table findById(int id) {
+   public List<Orders> findAllOrdersFromProduct(Product p) {
+      try {
+         connect = getConnection();
+         ps = connect.prepareStatement(FIND_ALL_ORDERS_FROM_PRODUCT);
+         ps.setInt(1, p.getId());
+
+         ResultSet rs = ps.executeQuery();
+         List<Orders> o = new ArrayList<Orders>();
+
+         FacadeOrders facadeOrders = new FacadeOrders();
+
+         while (rs.next()) {
+            o.add(facadeOrders.listById(rs.getInt("orders_id")));
+         }
+         
+         return o;
+      } catch (SQLException e) {
+         throw new RuntimeException(e);
+      } finally {
+         close(ps);
+         close(connect);
+      }
+   }
+   
+   public OrdersProduct findById(int id) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(FIND_BY_ID);
@@ -114,10 +133,10 @@ public class TableDaoImpl extends Dao implements TableDao {
          ResultSet rs = ps.executeQuery();
 
          if (rs.next()) {
-            Table table = new Table(rs.getInt("number"), rs.getInt("capacity"));
-            table.setId(rs.getInt("id"));
+            OrdersProduct orders = new OrdersProduct(rs.getInt("orders_id"), rs.getInt("product_id"));
+            orders.setId(rs.getInt("id"));
 
-            return table;
+            return orders;
          } else {
             return null;
          }
@@ -128,29 +147,4 @@ public class TableDaoImpl extends Dao implements TableDao {
          close(connect);
       }
    }
-
-   public Table findByNumber(int number) {
-      try {
-         connect = getConnection();
-         ps = connect.prepareStatement(FIND_BY_NUMBER);
-         ps.setInt(1, number);
-
-         ResultSet rs = ps.executeQuery();
-
-         if (rs.next()) {
-            Table table = new Table(rs.getInt("number"), rs.getInt("capacity"));
-            table.setId(rs.getInt("id"));
-
-            return table;
-         } else {
-            return null;
-         }
-      } catch (SQLException e) {
-         throw new RuntimeException(e);
-      } finally {
-         close(ps);
-         close(connect);
-      }
-   }
-
 }

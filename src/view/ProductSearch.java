@@ -5,7 +5,7 @@
  */
 package view;
 
-import facade.FacadeWaiter;
+import facade.FacadeProduct;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -14,16 +14,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Felipe
  */
-public class WaiterSearch extends InternalFrameHelper {
+public class ProductSearch extends InternalFrameHelper {
 
-    protected FacadeWaiter facadeWaiter;
+    protected FacadeProduct facadeProduct;
     protected DefaultTableModel defaultTableModel;
 
     /**
      * Creates new form TableSearch
      */
-    public WaiterSearch() {
-        facadeWaiter = new FacadeWaiter();
+    public ProductSearch() {
+        facadeProduct = new FacadeProduct();
         initComponents();
         loadTable();
 
@@ -34,8 +34,8 @@ public class WaiterSearch extends InternalFrameHelper {
         cleanTable();
         defaultTableModel = (DefaultTableModel) tablePane.getModel();
 
-        for (entity.Waiter w : facadeWaiter.listAll()) {
-            defaultTableModel.addRow(new Object[]{w.getCpf(), w.getName(), w.getSalary()});
+        for (entity.Product p : facadeProduct.listAll()) {
+            defaultTableModel.addRow(new Object[]{p.getCode(), p.getName(), p.getPrice()});
         }
     }
 
@@ -64,7 +64,7 @@ public class WaiterSearch extends InternalFrameHelper {
       removeButton = new javax.swing.JButton();
       jLabel4 = new javax.swing.JLabel();
       jLabel1 = new javax.swing.JLabel();
-      searchCPF = new javax.swing.JTextField();
+      searchCode = new javax.swing.JTextField();
       searchButton = new javax.swing.JButton();
       waiterAdd = new javax.swing.JButton();
 
@@ -76,11 +76,11 @@ public class WaiterSearch extends InternalFrameHelper {
 
          },
          new String [] {
-            "CPF", "Nome", "Salário"
+            "Código", "Nome", "Preço"
          }
       ) {
          Class[] types = new Class [] {
-            java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            java.lang.Integer.class, java.lang.String.class, java.lang.Double.class
          };
          boolean[] canEdit = new boolean [] {
             false, false, false
@@ -111,9 +111,9 @@ public class WaiterSearch extends InternalFrameHelper {
       });
 
       jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-      jLabel4.setText("Pesquisa de Garçons");
+      jLabel4.setText("Pesquisa de Produtos");
 
-      jLabel1.setText("CPF do garçom");
+      jLabel1.setText("Código do produto");
 
       searchButton.setText("Pesquisar");
       searchButton.addActionListener(new java.awt.event.ActionListener() {
@@ -122,7 +122,7 @@ public class WaiterSearch extends InternalFrameHelper {
          }
       });
 
-      waiterAdd.setText("Adicionar Garçom");
+      waiterAdd.setText("Adicionar Produto");
       waiterAdd.addActionListener(new java.awt.event.ActionListener() {
          public void actionPerformed(java.awt.event.ActionEvent evt) {
             waiterAddActionPerformed(evt);
@@ -143,7 +143,7 @@ public class WaiterSearch extends InternalFrameHelper {
                .addComponent(jScrollPane1)
                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                   .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                     .addComponent(searchCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                     .addComponent(searchCode, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                      .addComponent(jLabel1))
                   .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                   .addComponent(searchButton))
@@ -164,7 +164,7 @@ public class WaiterSearch extends InternalFrameHelper {
             .addComponent(jLabel1)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-               .addComponent(searchCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+               .addComponent(searchCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                .addComponent(searchButton))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -179,21 +179,21 @@ public class WaiterSearch extends InternalFrameHelper {
    }// </editor-fold>//GEN-END:initComponents
 
    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-       if (!this.searchCPF.getText().isEmpty()) {
+       if (!this.searchCode.getText().isEmpty()) {
            cleanTable();
            defaultTableModel = (DefaultTableModel) tablePane.getModel();
            
-           String cpf = searchCPF.getText();
+           int code = Integer.parseInt(searchCode.getText());
 
-           entity.Waiter w = facadeWaiter.listByCpf(cpf);
+           entity.Product p = facadeProduct.listByCode(code);
 
-           if (w instanceof entity.Waiter) {
-               defaultTableModel.addRow(new Object[]{w.getCpf(), w.getName(), w.getSalary()});
+           if (p instanceof entity.Product) {
+               defaultTableModel.addRow(new Object[]{p.getCode(), p.getName(), p.getPrice()});
            } else {
-               message("Não foi encontrado nenhum garçom com o CPF: " + cpf, "Garçom não encontrado", JOptionPane.OK_OPTION);
+               message("Não foi encontrado nenhum produto com o código: " + code, "Produto não encontrado", JOptionPane.OK_OPTION);
            }
        } else {
-           message("Você deve informar o CPF do garçom para buscar", "Busca vazia", JOptionPane.OK_OPTION);
+           message("Você deve informar o código do produto para buscar", "Busca vazia", JOptionPane.OK_OPTION);
        }
    }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -203,11 +203,11 @@ public class WaiterSearch extends InternalFrameHelper {
         if (line >= 0) {
             Object lineId = tablePane.getValueAt(line, 0);
             
-            WaiterNew wn = new WaiterNew(lineId.toString());
+            ProductNew pn = new ProductNew(lineId.hashCode());
             JDesktopPane desktopPane = getDesktopPane();
-            desktopPane.add(wn);
+            desktopPane.add(pn);
 
-            wn.setVisible(true);
+            pn.setVisible(true);
             this.setVisible(false);
         } else {
             message("Você deve selecionar uma linha para editar.", "Atenção", JOptionPane.OK_OPTION);
@@ -215,11 +215,11 @@ public class WaiterSearch extends InternalFrameHelper {
     }//GEN-LAST:event_editButtonActionPerformed
 
     private void waiterAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_waiterAddActionPerformed
-        WaiterNew wn = new WaiterNew("");
+        ProductNew pn = new ProductNew(0);
         JDesktopPane desktopPane = getDesktopPane();
-        desktopPane.add(wn);
+        desktopPane.add(pn);
         
-        wn.setVisible(true);
+        pn.setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_waiterAddActionPerformed
 
@@ -230,14 +230,14 @@ public class WaiterSearch extends InternalFrameHelper {
             Object lineId = tablePane.getValueAt(line, 0);
 
             if (JOptionPane.showConfirmDialog(null, "Você tem certeza?", "ATENÇÃO", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                entity.Waiter t = facadeWaiter.listByCpf(Integer.toString(line));
+                entity.Product p = facadeProduct.listByCode(line);
 
-                if (t instanceof entity.Waiter) {
-                    facadeWaiter.delete(Integer.toString(line));
+                if (p instanceof entity.Product) {
+                    facadeProduct.delete(line);
                     
                     loadTable();
                 } else {
-                    message("Não foi encontrado o garçom escolhido. Certifique-se que você selecionou a linha.", "Garçom não encontrado", JOptionPane.OK_OPTION);
+                    message("Não foi encontrado o produto escolhido. Certifique-se que você selecionou a linha.", "Produto não encontrado", JOptionPane.OK_OPTION);
                 }
             }
         } else {
@@ -253,7 +253,7 @@ public class WaiterSearch extends InternalFrameHelper {
    private javax.swing.JScrollPane jScrollPane1;
    private javax.swing.JButton removeButton;
    private javax.swing.JButton searchButton;
-   private javax.swing.JTextField searchCPF;
+   private javax.swing.JTextField searchCode;
    private javax.swing.JTable tablePane;
    private javax.swing.JButton waiterAdd;
    // End of variables declaration//GEN-END:variables

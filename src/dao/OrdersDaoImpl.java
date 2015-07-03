@@ -1,39 +1,61 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package dao;
 
-import java.sql.Statement;
+import static dao.Dao.close;
+import static dao.OrdersDao.DELETE;
+import static dao.OrdersDao.FIND_ALL_TABLES_FROM_WAITER;
+import static dao.OrdersDao.FIND_BY_ID;
+import static dao.OrdersDao.INSERT;
+import entity.Orders;
+
+import entity.Product;
+import entity.Table;
+import entity.Waiter;
+import facade.FacadeTable;
+import facade.FacadeWaiter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
-import entity.Waiter;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class WaiterDaoImpl extends Dao implements WaiterDao {
+/**
+ *
+ * @author Felipe
+ */
+public class OrdersDaoImpl extends Dao implements OrdersDao {
 
    private PreparedStatement ps;
    private Connection connect;
    private DateFormat dateFormat;
 
-   public WaiterDaoImpl() {
+   public OrdersDaoImpl() {
       dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
    }
 
-   public int insert(Waiter w) {
+   public int insert(Table t, Waiter w) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-         ps.setString(1, w.getName());
-         ps.setString(2, w.getCpf());
-         ps.setDouble(3, w.getSalary());
-         ps.setString(4, this.dateFormat.format(new Date()));
+         ps.setInt(1, t.getId());
+         ps.setInt(2, w.getId());
+         ps.setString(3, this.dateFormat.format(new Date()));
 
          int result = ps.executeUpdate();
-         
+
+         if (result == 0) {
+            throw new SQLException("Creating failed, no rows affected.");
+         }
+
          try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
             if (generatedKeys.next()) {
                return generatedKeys.getInt(1);
@@ -49,11 +71,11 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
       }
    }
 
-   public int delete(Waiter w) {
+   public int delete(Orders o) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(DELETE);
-         ps.setString(1, w.getCpf());
+         ps.setInt(1, o.getId());
 
          return ps.executeUpdate();
       } catch (SQLException e) {
@@ -64,40 +86,22 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
       }
    }
 
-   public int update(Waiter w) {
+   public List<Table> findAllTablesFromWaiter(Waiter w) {
       try {
          connect = getConnection();
-         ps = connect.prepareStatement(UPDATE);
-         ps.setString(1, w.getName());
-         ps.setString(2, w.getCpf());
-         ps.setDouble(3, w.getSalary());
-         ps.setInt(4, w.getId());
-
-         return ps.executeUpdate();
-      } catch (SQLException e) {
-         throw new RuntimeException(e);
-      } finally {
-         close(ps);
-         close(connect);
-      }
-   }
-
-   public Waiter findByName(String name) {
-      try {
-         connect = getConnection();
-         ps = connect.prepareStatement(FIND_BY_NAME);
-         ps.setString(1, name);
+         ps = connect.prepareStatement(FIND_ALL_TABLES_FROM_WAITER);
+         ps.setInt(1, w.getId());
 
          ResultSet rs = ps.executeQuery();
+         List<Table> t = new ArrayList<Table>();
 
-         if (rs.next()) {
-            Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-            waiter.setId(rs.getInt("id"));
+         FacadeTable facadeTable = new FacadeTable();
 
-            return waiter;
-         } else {
-            return null;
+         while (rs.next()) {
+            t.add(facadeTable.listByNumber(rs.getInt("waiter_id")));
          }
+
+         return t;
       } catch (SQLException e) {
          throw new RuntimeException(e);
       } finally {
@@ -106,19 +110,19 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
       }
    }
 
-   public List<Waiter> findAll() {
+   public List<Waiter> findAllWaitersFromTable(Table t) {
       try {
          connect = getConnection();
-         ps = connect.prepareStatement(FIND_ALL);
+         ps = connect.prepareStatement(FIND_ALL_WAITERS_FROM_TABLE);
+         ps.setInt(1, t.getId());
 
          ResultSet rs = ps.executeQuery();
          List<Waiter> w = new ArrayList<Waiter>();
 
-         while (rs.next()) {
-            Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-            waiter.setId(rs.getInt("id"));
+         FacadeWaiter facadeWaiter = new FacadeWaiter();
 
-            w.add(waiter);
+         while (rs.next()) {
+            w.add(facadeWaiter.listById(rs.getInt("waiter_id")));
          }
 
          return w;
@@ -130,7 +134,7 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
       }
    }
 
-   public Waiter findById(int id) {
+   public Orders findById(int id) {
       try {
          connect = getConnection();
          ps = connect.prepareStatement(FIND_BY_ID);
@@ -139,10 +143,10 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
          ResultSet rs = ps.executeQuery();
 
          if (rs.next()) {
-            Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-            waiter.setId(rs.getInt("id"));
+            Orders orders = new Orders(rs.getInt("table_id"), rs.getInt("waiter_id"));
+            orders.setId(rs.getInt("id"));
 
-            return waiter;
+            return orders;
          } else {
             return null;
          }
@@ -153,20 +157,20 @@ public class WaiterDaoImpl extends Dao implements WaiterDao {
          close(connect);
       }
    }
-
-   public Waiter findByCpf(String cpf) {
+   
+   public Orders findByTableId(int id) {
       try {
          connect = getConnection();
-         ps = connect.prepareStatement(FIND_BY_CPF);
-         ps.setString(1, cpf);
+         ps = connect.prepareStatement(FIND_BY_TABLE_ID);
+         ps.setInt(1, id);
 
          ResultSet rs = ps.executeQuery();
 
          if (rs.next()) {
-            Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-            waiter.setId(rs.getInt("id"));
+            Orders orders = new Orders(rs.getInt("table_id"), rs.getInt("waiter_id"));
+            orders.setId(rs.getInt("id"));
 
-            return waiter;
+            return orders;
          } else {
             return null;
          }

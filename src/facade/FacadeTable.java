@@ -20,9 +20,10 @@ public class FacadeTable {
       return t;
    }
 
-   public Table update(int number, int capacity) {
+   public Table update(int number, int capacity, int status) {
       Table t = table.findByNumber(number);
       t.setCapacity(capacity);
+      t.setStatus(status);
       table.update(t);
 
       return t;
@@ -40,5 +41,9 @@ public class FacadeTable {
 
    public Table listByNumber(int number) {
       return table.findByNumber(number);
+   }
+   
+   public Table listById(int id) {
+      return table.findById(id);
    }
 }

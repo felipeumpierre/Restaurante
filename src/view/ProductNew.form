@@ -30,7 +30,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="cancelButton" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                              <Component id="cpf" min="-2" pref="178" max="-2" attributes="0"/>
+                              <Component id="code" min="-2" pref="178" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -41,7 +41,7 @@
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
-                                      <Component id="salary" min="-2" pref="178" max="-2" attributes="0"/>
+                                      <Component id="price" min="-2" pref="178" max="-2" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
@@ -55,7 +55,7 @@
                   </Group>
                   <Component id="title" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="15" max="32767" attributes="0"/>
+              <EmptySpace pref="13" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -73,12 +73,12 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="cpf" min="-2" max="-2" attributes="0"/>
+                      <Component id="code" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="salary" min="-2" max="-2" attributes="0"/>
+                      <Component id="price" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -94,16 +94,16 @@
   <SubComponents>
     <Component class="javax.swing.JTextField" name="name">
     </Component>
-    <Component class="javax.swing.JTextField" name="cpf">
+    <Component class="javax.swing.JTextField" name="code">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Nome do Gar&#xe7;om"/>
+        <Property name="text" type="java.lang.String" value="Nome do Produto"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>
-        <Property name="text" type="java.lang.String" value="CPF"/>
+        <Property name="text" type="java.lang.String" value="C&#xf3;digo"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="insertButton">
@@ -127,14 +127,14 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="24" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Cadastro de Gar&#xe7;om"/>
+        <Property name="text" type="java.lang.String" value="Cadastro de Produto"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="salary">
+    <Component class="javax.swing.JTextField" name="price">
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Sal&#xe1;rio"/>
+        <Property name="text" type="java.lang.String" value="Pre&#xe7;o"/>
       </Properties>
     </Component>
   </SubComponents>
