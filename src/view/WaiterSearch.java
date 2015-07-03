@@ -5,7 +5,7 @@
  */
 package view;
 
-import facade.FacadeTable;
+import facade.FacadeWaiter;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -14,16 +14,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Felipe
  */
-public class TableSearch extends InternalFrameHelper {
+public class WaiterSearch extends InternalFrameHelper {
 
-    protected FacadeTable facadeTable;
+    protected FacadeWaiter facadeWaiter;
     protected DefaultTableModel defaultTableModel;
 
     /**
      * Creates new form TableSearch
      */
-    public TableSearch() {
-        facadeTable = new FacadeTable();
+    public WaiterSearch() {
+        facadeWaiter = new FacadeWaiter();
         initComponents();
         loadTable();
 
@@ -34,8 +34,8 @@ public class TableSearch extends InternalFrameHelper {
         cleanTable();
         defaultTableModel = (DefaultTableModel) tablePane.getModel();
 
-        for (entity.Table t : facadeTable.listAll()) {
-            defaultTableModel.addRow(new Object[]{t.getNumber(), t.getCapacity()});
+        for (entity.Waiter w : facadeWaiter.listAll()) {
+            defaultTableModel.addRow(new Object[]{w.getCpf(), w.getName(), w.getSalary()});
         }
     }
 
@@ -64,9 +64,9 @@ public class TableSearch extends InternalFrameHelper {
         removeButton = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        searchNumber = new javax.swing.JTextField();
+        searchCPF = new javax.swing.JTextField();
         searchButton = new javax.swing.JButton();
-        tableAdd = new javax.swing.JButton();
+        waiterAdd = new javax.swing.JButton();
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel3.setText("Cadastro de Mesa");
@@ -76,11 +76,11 @@ public class TableSearch extends InternalFrameHelper {
 
             },
             new String [] {
-                "Número", "Capacidade"
+                "CPF", "Nome", "Salário"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -104,9 +104,9 @@ public class TableSearch extends InternalFrameHelper {
         });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel4.setText("Pesquisa de Mesas");
+        jLabel4.setText("Pesquisa de Garçons");
 
-        jLabel1.setText("Número da mesa");
+        jLabel1.setText("CPF do garçom");
 
         searchButton.setText("Pesquisar");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
@@ -115,10 +115,10 @@ public class TableSearch extends InternalFrameHelper {
             }
         });
 
-        tableAdd.setText("Adicionar Mesa");
-        tableAdd.addActionListener(new java.awt.event.ActionListener() {
+        waiterAdd.setText("Adicionar Garçom");
+        waiterAdd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tableAddActionPerformed(evt);
+                waiterAddActionPerformed(evt);
             }
         });
 
@@ -136,14 +136,14 @@ public class TableSearch extends InternalFrameHelper {
                     .addComponent(jScrollPane1)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(searchNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(searchCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(searchButton))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(tableAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(waiterAdd, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -151,13 +151,13 @@ public class TableSearch extends InternalFrameHelper {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(tableAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(waiterAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchCPF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(searchButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -172,21 +172,21 @@ public class TableSearch extends InternalFrameHelper {
     }// </editor-fold>//GEN-END:initComponents
 
    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-       if (!this.searchNumber.getText().isEmpty()) {
+       if (!this.searchCPF.getText().isEmpty()) {
            cleanTable();
            defaultTableModel = (DefaultTableModel) tablePane.getModel();
            
-           int number = Integer.parseInt(searchNumber.getText());
+           String cpf = searchCPF.getText();
 
-           entity.Table t = facadeTable.listByNumber(number);
+           entity.Waiter w = facadeWaiter.listByCpf(cpf);
 
-           if (t instanceof entity.Table) {
-               defaultTableModel.addRow(new Object[]{t.getNumber(), t.getCapacity()});
+           if (w instanceof entity.Waiter) {
+               defaultTableModel.addRow(new Object[]{w.getCpf(), w.getName(), w.getSalary()});
            } else {
-               message("Não foi encontrado nenhuma mesa com o número: " + number, "Mesa não encontrada", JOptionPane.OK_OPTION);
+               message("Não foi encontrado nenhum garçom com o CPF: " + cpf, "Garçom não encontrado", JOptionPane.OK_OPTION);
            }
        } else {
-           message("Você deve informar um número de mesa para buscar", "Busca vazia", JOptionPane.OK_OPTION);
+           message("Você deve informar o CPF do garçom para buscar", "Busca vazia", JOptionPane.OK_OPTION);
        }
    }//GEN-LAST:event_searchButtonActionPerformed
 
@@ -196,25 +196,25 @@ public class TableSearch extends InternalFrameHelper {
         if (line >= 0) {
             Object lineId = tablePane.getValueAt(line, 0);
 
-            TableNew tn = new TableNew(lineId.hashCode());
+            WaiterNew wn = new WaiterNew(lineId.hashCode());
             JDesktopPane desktopPane = getDesktopPane();
-            desktopPane.add(tn);
+            desktopPane.add(wn);
 
-            tn.setVisible(true);
+            wn.setVisible(true);
             this.setVisible(false);
         } else {
             message("Você deve selecionar uma linha para editar.", "Atenção", JOptionPane.OK_OPTION);
         }
     }//GEN-LAST:event_editButtonActionPerformed
 
-    private void tableAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableAddActionPerformed
-        TableNew tn = new TableNew(0);
+    private void waiterAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_waiterAddActionPerformed
+        WaiterNew wn = new WaiterNew(0);
         JDesktopPane desktopPane = getDesktopPane();
-        desktopPane.add(tn);
+        desktopPane.add(wn);
         
-        tn.setVisible(true);
+        wn.setVisible(true);
         this.setVisible(false);
-    }//GEN-LAST:event_tableAddActionPerformed
+    }//GEN-LAST:event_waiterAddActionPerformed
 
     private void removeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeButtonActionPerformed
         int line = tablePane.getSelectedRow();
@@ -223,21 +223,20 @@ public class TableSearch extends InternalFrameHelper {
             Object lineId = tablePane.getValueAt(line, 0);
 
             if (JOptionPane.showConfirmDialog(null, "Você tem certeza?", "ATENÇÃO", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                entity.Table t = facadeTable.listByNumber(line);
+                entity.Waiter t = facadeWaiter.listByCpf(Integer.toString(line));
 
-                if (t instanceof entity.Table) {
-                    facadeTable.delete(line);
+                if (t instanceof entity.Waiter) {
+                    facadeWaiter.delete(Integer.toString(line));
                     
                     loadTable();
                 } else {
-                    message("Não foi encontrado a mesa escolhida. Certifique-se que você selecionou a linha.", "Mesa não encontrada", JOptionPane.OK_OPTION);
+                    message("Não foi encontrado o garçom escolhido. Certifique-se que você selecionou a linha.", "Garçom não encontrado", JOptionPane.OK_OPTION);
                 }
             }
         } else {
             message("Você deve selecionar uma linha para remover.", "Atenção", JOptionPane.OK_OPTION);
         }
     }//GEN-LAST:event_removeButtonActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton editButton;
@@ -247,8 +246,8 @@ public class TableSearch extends InternalFrameHelper {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton removeButton;
     private javax.swing.JButton searchButton;
-    private javax.swing.JTextField searchNumber;
-    private javax.swing.JButton tableAdd;
+    private javax.swing.JTextField searchCPF;
     private javax.swing.JTable tablePane;
+    private javax.swing.JButton waiterAdd;
     // End of variables declaration//GEN-END:variables
 }

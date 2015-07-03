@@ -9,161 +9,171 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Product;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ProductDaoImpl extends Dao implements ProductDao {
-	private PreparedStatement ps;
-	private Connection connect;
 
-	public int insert(Product p) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setInt(1, p.getCode());
-			ps.setString(2, p.getName());
-			ps.setDouble(3, p.getPrice());
+    private PreparedStatement ps;
+    private Connection connect;
+    private DateFormat dateFormat;
+    
+    public ProductDaoImpl() {
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    }
 
-			int result = ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
+    public int insert(Product p) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, p.getCode());
+            ps.setString(2, p.getName());
+            ps.setDouble(3, p.getPrice());
+            ps.setString(4, this.dateFormat.format(new Date()));
 
-			if (rs.next()) {
-				p.setId(rs.getInt(1));
-			}
+            int result = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
 
-			return result;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                p.setId(rs.getInt(1));
+            }
 
-	public int delete(Product p) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(DELETE);
-			ps.setInt(1, p.getId());
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			return ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+    public int delete(Product p) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(DELETE);
+            ps.setInt(1, p.getId());
 
-	public int update(Product p) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(UPDATE);
-			ps.setInt(1, p.getId());
-			ps.setInt(2, p.getCode());
-			ps.setString(3, p.getName());
-			ps.setDouble(4, p.getPrice());
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			return ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+    public int update(Product p) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(UPDATE);
+            ps.setInt(1, p.getId());
+            ps.setInt(2, p.getCode());
+            ps.setString(3, p.getName());
+            ps.setDouble(4, p.getPrice());
 
-	public List<Product> findAll() {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_ALL);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
-			List<Product> p = new ArrayList<Product>();
+    public List<Product> findAll() {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_ALL);
 
-			while (rs.next()) {
-				Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
-				product.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
+            List<Product> p = new ArrayList<Product>();
 
-				p.add(product);
-			}
+            while (rs.next()) {
+                Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
+                product.setId(rs.getInt("id"));
 
-			return p;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+                p.add(product);
+            }
 
-	public Product findByName(String name) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_NAME);
-			ps.setString(1, name);
+            return p;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Product findByName(String name) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_NAME);
+            ps.setString(1, name);
 
-			if (rs.next()) {
-				Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
-				product.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return product;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
+                product.setId(rs.getInt("id"));
 
-	public Product findById(int id) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_ID);
-			ps.setInt(1, id);
+                return product;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Product findById(int id) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_ID);
+            ps.setInt(1, id);
 
-			if (rs.next()) {
-				Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
-				product.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return product;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
+                product.setId(rs.getInt("id"));
 
-	public Product findByCode(int code) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_CODE);
-			ps.setInt(1, code);
+                return product;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Product findByCode(int code) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_CODE);
+            ps.setInt(1, code);
 
-			if (rs.next()) {
-				Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
-				product.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return product;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Product product = new Product(rs.getInt("code"), rs.getString("name"), rs.getDouble("price"));
+                product.setId(rs.getInt("id"));
+
+                return product;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 }

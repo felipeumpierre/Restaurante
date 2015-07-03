@@ -5,6 +5,8 @@
  */
 package view;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Felipe
@@ -41,6 +43,9 @@ public class InternalFrameHelper extends javax.swing.JInternalFrame {
       pack();
    }// </editor-fold>//GEN-END:initComponents
 
+   protected void message(String message, String title, int type) {
+       JOptionPane.showMessageDialog(null, message, title, type);
+   }
 
    // Variables declaration - do not modify//GEN-BEGIN:variables
    // End of variables declaration//GEN-END:variables

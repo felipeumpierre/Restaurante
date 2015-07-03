@@ -9,161 +9,171 @@ import java.util.ArrayList;
 import java.util.List;
 
 import entity.Waiter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class WaiterDaoImpl extends Dao implements WaiterDao {
-	private PreparedStatement ps;
-	private Connection connect;
 
-	public int insert(Waiter w) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, w.getName());
-			ps.setString(2, w.getCpf());
-			ps.setDouble(3, w.getSalary());
+    private PreparedStatement ps;
+    private Connection connect;
+    private DateFormat dateFormat;
+    
+    public WaiterDaoImpl() {
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    }
 
-			int result = ps.executeUpdate();
-			ResultSet rs = ps.getGeneratedKeys();
+    public int insert(Waiter w) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, w.getName());
+            ps.setString(2, w.getCpf());
+            ps.setDouble(3, w.getSalary());
+            ps.setString(4, this.dateFormat.format(new Date()));
 
-			if (rs.next()) {
-				w.setId(rs.getInt(1));
-			}
+            int result = ps.executeUpdate();
+            ResultSet rs = ps.getGeneratedKeys();
 
-			return result;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                w.setId(rs.getInt(1));
+            }
 
-	public int delete(Waiter w) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(DELETE);
-			ps.setString(1, w.getCpf());
+            return result;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			return ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+    public int delete(Waiter w) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(DELETE);
+            ps.setString(1, w.getCpf());
 
-	public int update(Waiter w) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(UPDATE);
-			ps.setInt(1, w.getId());
-			ps.setString(2, w.getName());
-			ps.setString(3, w.getCpf());
-			ps.setDouble(4, w.getSalary());
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			return ps.executeUpdate();
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+    public int update(Waiter w) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(UPDATE);
+            ps.setInt(1, w.getId());
+            ps.setString(2, w.getName());
+            ps.setString(3, w.getCpf());
+            ps.setDouble(4, w.getSalary());
 
-	public Waiter findByName(String name) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_NAME);
-			ps.setString(1, name);
+            return ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Waiter findByName(String name) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_NAME);
+            ps.setString(1, name);
 
-			if (rs.next()) {
-				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-				waiter.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return waiter;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+                waiter.setId(rs.getInt("id"));
 
-	public List<Waiter> findAll() {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_ALL);
+                return waiter;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
-			List<Waiter> w = new ArrayList<Waiter>();
+    public List<Waiter> findAll() {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_ALL);
 
-			while (rs.next()) {
-				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-				waiter.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
+            List<Waiter> w = new ArrayList<Waiter>();
 
-				w.add(waiter);
-			}
+            while (rs.next()) {
+                Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+                waiter.setId(rs.getInt("id"));
 
-			return w;
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+                w.add(waiter);
+            }
 
-	public Waiter findById(int id) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_ID);
-			ps.setInt(1, id);
+            return w;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Waiter findById(int id) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_ID);
+            ps.setInt(1, id);
 
-			if (rs.next()) {
-				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-				waiter.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return waiter;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+                waiter.setId(rs.getInt("id"));
 
-	public Waiter findByCpf(String cpf) {
-		try {
-			connect = getConnection();
-			ps = connect.prepareStatement(FIND_BY_CPF);
-			ps.setString(1, cpf);
+                return waiter;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 
-			ResultSet rs = ps.executeQuery();
+    public Waiter findByCpf(String cpf) {
+        try {
+            connect = getConnection();
+            ps = connect.prepareStatement(FIND_BY_CPF);
+            ps.setString(1, cpf);
 
-			if (rs.next()) {
-				Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
-				waiter.setId(rs.getInt("id"));
+            ResultSet rs = ps.executeQuery();
 
-				return waiter;
-			} else {
-				return null;
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		} finally {
-			close(ps);
-			close(connect);
-		}
-	}
+            if (rs.next()) {
+                Waiter waiter = new Waiter(rs.getString("name"), rs.getString("cpf"), rs.getDouble("salary"));
+                waiter.setId(rs.getInt("id"));
+
+                return waiter;
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            close(ps);
+            close(connect);
+        }
+    }
 }

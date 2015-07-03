@@ -11,6 +11,8 @@ public class MainView extends javax.swing.JFrame {
      */
     public MainView() {
         initComponents();
+        this.setSize(800, 800);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -150,11 +152,17 @@ public class MainView extends javax.swing.JFrame {
     }//GEN-LAST:event_productSearchActionPerformed
 
     private void waiterNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_waiterNewActionPerformed
-        // TODO add your handling code here:
+        WaiterNew wn = new WaiterNew(0);
+        mainPane.add(wn);
+        
+        wn.setVisible(true);
     }//GEN-LAST:event_waiterNewActionPerformed
 
     private void waiterSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_waiterSearchActionPerformed
-        // TODO add your handling code here:
+        WaiterSearch ws = new WaiterSearch();
+        mainPane.add(ws);
+        
+        ws.setVisible(true);
     }//GEN-LAST:event_waiterSearchActionPerformed
 
     private void tableNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableNewActionPerformed
